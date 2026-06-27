@@ -1,3 +1,4 @@
 export enum SceneKey {
-  Boot = 'boot'
+  Boot = 'boot',
+  EnvironmentShowcase = 'environment-showcase'
 }

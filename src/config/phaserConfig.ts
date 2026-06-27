@@ -10,8 +10,18 @@ export function createGameConfig(parent: string, services: Services): Phaser.Typ
     width: 1280,
     height: 720,
     backgroundColor: '#111111',
-    pixelArt: false,
-    roundPixels: false,
+    pixelArt: true,
+    roundPixels: true,
+    physics: {
+      default: 'arcade',
+      arcade: {
+        gravity: {
+          x: 0,
+          y: 1200
+        },
+        debug: false
+      }
+    },
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH

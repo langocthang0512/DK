@@ -27,5 +27,6 @@ export class BootScene extends Phaser.Scene {
   create(): void {
     this.#services.debug.registerScene(this);
     this.#services.events.emit('scene:ready', { key: SceneKey.Boot });
+    this.scene.start(SceneKey.EnvironmentShowcase);
   }
 }

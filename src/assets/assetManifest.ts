@@ -13,7 +13,23 @@ export type AssetManifest = Readonly<{
   audio: readonly AudioAsset[];
 }>;
 
+const floorTiles2Themes = ['spring', 'autumn', 'winter'] as const;
+const floorTiles2Pieces = [
+  'solidBlock',
+  'hollowBlock',
+  'smallBlock',
+  'wideStep',
+  'archColumn',
+  'rightCluster',
+  'floatingPlatform'
+] as const;
+
 export const assetManifest: AssetManifest = {
-  images: [],
+  images: floorTiles2Themes.flatMap((theme) =>
+    floorTiles2Pieces.map((piece) => ({
+      key: `environment.floorTiles2.${theme}.${piece}`,
+      url: `/assets/environment/floor-tiles2/${theme}/${piece}.png`
+    }))
+  ),
   audio: []
 };
