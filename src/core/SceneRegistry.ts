@@ -1,7 +1,7 @@
 import type Phaser from 'phaser';
 
 import { BootScene } from '@scenes/BootScene';
-import { EnvironmentShowcaseScene } from '@scenes/EnvironmentShowcaseScene';
+import { ProductionScene } from '@scenes/ProductionScene';
 import { SceneKey } from '@scenes/SceneKey';
 
 export type SceneRegistration = Readonly<{
@@ -15,7 +15,7 @@ export const sceneRegistry = [
     scene: BootScene
   },
   {
-    key: SceneKey.EnvironmentShowcase,
-    scene: EnvironmentShowcaseScene
+    key: SceneKey.Production,
+    scene: ProductionScene
   }
 ] as const satisfies readonly SceneRegistration[];

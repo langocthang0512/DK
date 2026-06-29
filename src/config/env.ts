@@ -20,7 +20,7 @@ const clientEnv = import.meta.env as ClientEnv;
 export const env = {
   appName: clientEnv.VITE_APP_NAME ?? 'DK',
   basePath: clientEnv.VITE_BASE_PATH ?? '/',
-  debug: readBoolean(clientEnv.VITE_DEBUG, clientEnv.DEV),
+  debug: readBoolean(clientEnv.VITE_DEBUG, false),
   saveNamespace: clientEnv.VITE_SAVE_NAMESPACE ?? 'dk',
   isDev: clientEnv.DEV,
   isProd: clientEnv.PROD

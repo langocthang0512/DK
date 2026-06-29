@@ -1,0 +1,138 @@
+{
+  "idle": {
+    "key": "player.idle",
+    "url": "/assets/player/idle.png",
+    "frameWidth": 120,
+    "frameHeight": 80,
+    "frameCount": 10,
+    "delays": [
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80
+    ],
+    "frameRate": 13
+  },
+  "run": {
+    "key": "player.run",
+    "url": "/assets/player/run.png",
+    "frameWidth": 120,
+    "frameHeight": 80,
+    "frameCount": 10,
+    "delays": [
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60
+    ],
+    "frameRate": 17
+  },
+  "jumpStart": {
+    "key": "player.jumpStart",
+    "url": "/assets/player/jumpStart.png",
+    "frameWidth": 120,
+    "frameHeight": 80,
+    "frameCount": 3,
+    "delays": [
+      60,
+      60,
+      60
+    ],
+    "frameRate": 17
+  },
+  "jumpInBetween": {
+    "key": "player.jumpInBetween",
+    "url": "/assets/player/jumpInBetween.png",
+    "frameWidth": 120,
+    "frameHeight": 80,
+    "frameCount": 2,
+    "delays": [
+      60,
+      60
+    ],
+    "frameRate": 17
+  },
+  "fall": {
+    "key": "player.fall",
+    "url": "/assets/player/fall.png",
+    "frameWidth": 120,
+    "frameHeight": 80,
+    "frameCount": 3,
+    "delays": [
+      60,
+      60,
+      60
+    ],
+    "frameRate": 17
+  },
+  "attack": {
+    "key": "player.attack",
+    "url": "/assets/player/attack.png",
+    "frameWidth": 120,
+    "frameHeight": 80,
+    "frameCount": 4,
+    "delays": [
+      60,
+      60,
+      60,
+      60
+    ],
+    "frameRate": 17
+  },
+  "hit": {
+    "key": "player.hit",
+    "url": "/assets/player/hit.png",
+    "frameWidth": 120,
+    "frameHeight": 80,
+    "frameCount": 1,
+    "delays": [
+      60
+    ],
+    "frameRate": 17
+  },
+  "death": {
+    "key": "player.death",
+    "url": "/assets/player/death.png",
+    "frameWidth": 120,
+    "frameHeight": 80,
+    "frameCount": 10,
+    "delays": [
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60,
+      60
+    ],
+    "frameRate": 17
+  },
+  "turnAround": {
+    "key": "player.turnAround",
+    "url": "/assets/player/turnAround.png",
+    "frameWidth": 120,
+    "frameHeight": 80,
+    "frameCount": 3,
+    "delays": [
+      70,
+      70,
+      70
+    ],
+    "frameRate": 14
+  }
+}

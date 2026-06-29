@@ -1,0 +1,190 @@
+{
+  "snake": {
+    "idle": {
+      "key": "enemy.snake.idle",
+      "url": "/assets/enemies/snake/idle.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 2,
+      "frameRate": 6,
+      "repeat": -1
+    },
+    "walk": {
+      "key": "enemy.snake.walk",
+      "url": "/assets/enemies/snake/walk.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 4,
+      "frameRate": 8,
+      "repeat": -1
+    },
+    "attack": {
+      "key": "enemy.snake.attack",
+      "url": "/assets/enemies/snake/attack.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 1,
+      "frameRate": 8,
+      "repeat": 0
+    },
+    "hurt": {
+      "key": "enemy.snake.hurt",
+      "url": "/assets/enemies/snake/hurt.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 4,
+      "frameRate": 8,
+      "repeat": 0
+    },
+    "death": {
+      "key": "enemy.snake.death",
+      "url": "/assets/enemies/snake/death.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 6,
+      "frameRate": 7,
+      "repeat": 0
+    }
+  },
+  "hyena": {
+    "idle": {
+      "key": "enemy.hyena.idle",
+      "url": "/assets/enemies/hyena/idle.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 2,
+      "frameRate": 6,
+      "repeat": -1
+    },
+    "walk": {
+      "key": "enemy.hyena.walk",
+      "url": "/assets/enemies/hyena/walk.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 4,
+      "frameRate": 8,
+      "repeat": -1
+    },
+    "attack": {
+      "key": "enemy.hyena.attack",
+      "url": "/assets/enemies/hyena/attack.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 1,
+      "frameRate": 8,
+      "repeat": 0
+    },
+    "hurt": {
+      "key": "enemy.hyena.hurt",
+      "url": "/assets/enemies/hyena/hurt.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 6,
+      "frameRate": 8,
+      "repeat": 0
+    },
+    "death": {
+      "key": "enemy.hyena.death",
+      "url": "/assets/enemies/hyena/death.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 6,
+      "frameRate": 7,
+      "repeat": 0
+    }
+  },
+  "scorpio": {
+    "idle": {
+      "key": "enemy.scorpio.idle",
+      "url": "/assets/enemies/scorpio/idle.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 2,
+      "frameRate": 6,
+      "repeat": -1
+    },
+    "walk": {
+      "key": "enemy.scorpio.walk",
+      "url": "/assets/enemies/scorpio/walk.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 4,
+      "frameRate": 8,
+      "repeat": -1
+    },
+    "attack": {
+      "key": "enemy.scorpio.attack",
+      "url": "/assets/enemies/scorpio/attack.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 1,
+      "frameRate": 8,
+      "repeat": 0
+    },
+    "hurt": {
+      "key": "enemy.scorpio.hurt",
+      "url": "/assets/enemies/scorpio/hurt.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 4,
+      "frameRate": 8,
+      "repeat": 0
+    },
+    "death": {
+      "key": "enemy.scorpio.death",
+      "url": "/assets/enemies/scorpio/death.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 4,
+      "frameRate": 7,
+      "repeat": 0
+    }
+  },
+  "vulture": {
+    "idle": {
+      "key": "enemy.vulture.idle",
+      "url": "/assets/enemies/vulture/idle.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 2,
+      "frameRate": 6,
+      "repeat": -1
+    },
+    "walk": {
+      "key": "enemy.vulture.walk",
+      "url": "/assets/enemies/vulture/walk.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 4,
+      "frameRate": 8,
+      "repeat": -1
+    },
+    "attack": {
+      "key": "enemy.vulture.attack",
+      "url": "/assets/enemies/vulture/attack.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 1,
+      "frameRate": 8,
+      "repeat": 0
+    },
+    "hurt": {
+      "key": "enemy.vulture.hurt",
+      "url": "/assets/enemies/vulture/hurt.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 4,
+      "frameRate": 8,
+      "repeat": 0
+    },
+    "death": {
+      "key": "enemy.vulture.death",
+      "url": "/assets/enemies/vulture/death.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "frames": 4,
+      "frameRate": 7,
+      "repeat": 0
+    }
+  }
+}

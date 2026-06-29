@@ -1,4 +1,9 @@
 export enum SceneKey {
   Boot = 'boot',
-  EnvironmentShowcase = 'environment-showcase'
+  Production = 'production',
+  CharacterDemo = 'character-demo',
+  EnemyTest = 'enemy-test',
+  BossArena = 'boss-arena',
+  TrapTest = 'trap-test',
+  VerticalSlice = 'vertical-slice'
 }

@@ -8,6 +8,10 @@ export class AssetLoader {
       loader.image(image.key, image.url);
     }
 
+    for (const spritesheet of assetManifest.spritesheets) {
+      loader.spritesheet(spritesheet.key, spritesheet.url, spritesheet.frameConfig);
+    }
+
     for (const audio of assetManifest.audio) {
       loader.audio(audio.key, [...audio.urls]);
     }
