@@ -1,8 +1,10 @@
 # DK
 
-DK is a web-based game project foundation built with Phaser, TypeScript, Vite, npm, Vercel, and GitHub Actions.
+DK is a web-based 2D platformer built with Phaser, TypeScript, Vite, npm, Vercel, and GitHub Actions.
 
-This repository currently contains architecture and development environment setup only. It intentionally does not include gameplay, characters, levels, mechanics, or production assets.
+Current version: `v1.0-final-test`
+
+This build contains the frozen final-test content: Map 1, Map 2, Map 3, and the final boss arena using only approved assets, animations, controllers, collisions, and gameplay systems.
 
 ## Requirements
 
@@ -17,6 +19,15 @@ npm run dev
 ```
 
 Open the local URL printed by Vite.
+
+## Final Test Build
+
+```bash
+npm run build
+npm run preview
+```
+
+The production build is emitted to `dist/`.
 
 ## Scripts
 
@@ -45,6 +56,23 @@ Source code lives in `src/` and is organized around engine infrastructure:
 - `src/config` - Environment and Phaser configuration
 - `src/constants` - Shared constants
 - `src/services` - Platform services such as save storage
+
+## Gameplay Content
+
+- Map 1: Green Start with tutorial, Snake, Spike trap, finish transition
+- Map 2: Ruin Crossing with Hyena, Scorpio, Trap_Exe, mixed combat
+- Map 3: Final Ascent with movement challenge, enemies, traps, Vulture, boss gate
+- Final Boss Arena: approved boss only, no extra enemies or hazards
+
+Approved systems included in this final-test build:
+
+- Player movement, double jump, attack, hit, death, fade, map restart
+- Ground and floating platform collision
+- Snake, Hyena, Scorpio, Vulture AI and cleanup
+- Trap_Spike and Trap_Exe trigger/damage timing
+- Boss movement, attacks, phases, damage reaction, death cleanup
+- Tutorial text on Map 1 only
+- Camera follow, look-ahead, transitions, boss arena zoom
 
 ## Deployment
 

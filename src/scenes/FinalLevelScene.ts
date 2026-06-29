@@ -1,6 +1,10 @@
 import Phaser from 'phaser';
 
-import { bossAnimationDefinitions, bossAnimationStates, getBossAnimationKey } from '@assets/bossAssets';
+import {
+  bossAnimationDefinitions,
+  bossAnimationStates,
+  getBossAnimationKey
+} from '@assets/bossAssets';
 import {
   enemyAnimationStates,
   enemyDefinitions,
@@ -137,7 +141,10 @@ const playerAnimationMeta = {
   hit: { frames: 1, frameRate: 17, repeat: 0 },
   death: { frames: 10, frameRate: 17, repeat: 0 },
   turnAround: { frames: 3, frameRate: 14, repeat: 0 }
-} as const satisfies Record<PlayerAnimationKey, Readonly<{ frames: number; frameRate: number; repeat: number }>>;
+} as const satisfies Record<
+  PlayerAnimationKey,
+  Readonly<{ frames: number; frameRate: number; repeat: number }>
+>;
 
 const map1Config: LevelConfig = {
   key: SceneKey.Map1,
@@ -158,11 +165,7 @@ const map1Config: LevelConfig = {
     enemy('snake', 42_200, 41_900, 42_700),
     enemy('snake', 54_000, 53_700, 54_500)
   ],
-  traps: [
-    spike(39_800),
-    spike(40_160, 180),
-    spike(51_600)
-  ],
+  traps: [spike(39_800), spike(40_160, 180), spike(51_600)],
   tutorial: [
     { text: 'MOVE', x: 620, y: 486 },
     { text: 'JUMP', x: 12_720, y: 486 },
@@ -346,7 +349,10 @@ export class FinalLevelScene extends Phaser.Scene {
       this.#playerBody.setMaxVelocity(MOVE_SPEED, 900);
     }
 
-    if (Phaser.Input.Keyboard.JustDown(this.#keys.up) || Phaser.Input.Keyboard.JustDown(this.#keys.space)) {
+    if (
+      Phaser.Input.Keyboard.JustDown(this.#keys.up) ||
+      Phaser.Input.Keyboard.JustDown(this.#keys.space)
+    ) {
       this.#jumpBufferedAt = time;
     }
 
@@ -398,7 +404,13 @@ export class FinalLevelScene extends Phaser.Scene {
       PlayerAnimationKey,
       (typeof playerAnimationMeta)[PlayerAnimationKey]
     ][]) {
-      this.#createAnimation(`player.${key}`, `player.${key}`, meta.frames, meta.frameRate, meta.repeat);
+      this.#createAnimation(
+        `player.${key}`,
+        `player.${key}`,
+        meta.frames,
+        meta.frameRate,
+        meta.repeat
+      );
     }
 
     for (const enemyType of enemyTypes) {
@@ -442,7 +454,13 @@ export class FinalLevelScene extends Phaser.Scene {
     }
   }
 
-  #createAnimation(key: string, sheetKey: string, frames: number, frameRate: number, repeat: number): void {
+  #createAnimation(
+    key: string,
+    sheetKey: string,
+    frames: number,
+    frameRate: number,
+    repeat: number
+  ): void {
     if (this.anims.exists(key)) {
       return;
     }
@@ -459,7 +477,10 @@ export class FinalLevelScene extends Phaser.Scene {
   }
 
   #createMap(): void {
-    this.add.rectangle(0, 0, this.config.worldWidth, WORLD_HEIGHT, 0x232421).setOrigin(0, 0).setDepth(-20);
+    this.add
+      .rectangle(0, 0, this.config.worldWidth, WORLD_HEIGHT, 0x232421)
+      .setOrigin(0, 0)
+      .setDepth(-20);
     this.#platforms = this.physics.add.staticGroup();
 
     for (const terrain of this.config.terrain) {
@@ -518,7 +539,10 @@ export class FinalLevelScene extends Phaser.Scene {
   #createFinish(): void {
     const finishX = this.config.worldWidth - 420;
     this.add.rectangle(finishX, 500, 16, 76, 0x9fff4a).setOrigin(0.5, 1).setDepth(10);
-    this.add.triangle(finishX + 35, 452, 0, 0, 58, 18, 0, 36, 0x9fff4a).setOrigin(0.5, 0.5).setDepth(10);
+    this.add
+      .triangle(finishX + 35, 452, 0, 0, 58, 18, 0, 36, 0x9fff4a)
+      .setOrigin(0.5, 0.5)
+      .setDepth(10);
     this.add.text(finishX - 52, 468, this.config.finishLabel, worldTextStyle()).setDepth(10);
     this.#finish = this.add.zone(finishX, 480, 150, 170);
     this.physics.add.existing(this.#finish, true);
@@ -606,7 +630,10 @@ export class FinalLevelScene extends Phaser.Scene {
 
   #configureCamera(): void {
     this.cameras.main.startFollow(this.#player, true, 0.1, 0.1);
-    this.cameras.main.setDeadzone(1280 * gameplayConfig.camera.deadZoneWidthRatio, 720 * gameplayConfig.camera.deadZoneHeightRatio);
+    this.cameras.main.setDeadzone(
+      1280 * gameplayConfig.camera.deadZoneWidthRatio,
+      720 * gameplayConfig.camera.deadZoneHeightRatio
+    );
     if (this.config.key === SceneKey.FinalBoss) {
       this.cameras.main.setZoom(1 - gameplayConfig.camera.bossZoomRatio);
     }
@@ -630,7 +657,9 @@ export class FinalLevelScene extends Phaser.Scene {
     return isLandingOnTop && playerCenterX >= body.x && playerCenterX <= body.x + body.width;
   }
 
-  #bodyFromCollider(value: unknown): Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody | null {
+  #bodyFromCollider(
+    value: unknown
+  ): Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody | null {
     if (this.#isArcadeBody(value)) {
       return value;
     }
@@ -644,15 +673,27 @@ export class FinalLevelScene extends Phaser.Scene {
       gameObject?: { getData?: (key: string) => unknown };
       getData?: (key: string) => unknown;
     } | null;
-    const terrainKind = candidate?.getData?.('terrainKind') ?? candidate?.gameObject?.getData?.('terrainKind');
+    const terrainKind =
+      candidate?.getData?.('terrainKind') ?? candidate?.gameObject?.getData?.('terrainKind');
 
-    return terrainKind === 'ground' || terrainKind === 'smallPlatform' || terrainKind === 'vinePlatform'
+    return terrainKind === 'ground' ||
+      terrainKind === 'smallPlatform' ||
+      terrainKind === 'vinePlatform'
       ? terrainKind
       : undefined;
   }
 
-  #isArcadeBody(value: unknown): value is Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody {
-    return typeof value === 'object' && value !== null && 'x' in value && 'y' in value && 'width' in value && 'height' in value;
+  #isArcadeBody(
+    value: unknown
+  ): value is Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'x' in value &&
+      'y' in value &&
+      'width' in value &&
+      'height' in value
+    );
   }
 
   #getHorizontalInput(): -1 | 0 | 1 {
@@ -673,7 +714,11 @@ export class FinalLevelScene extends Phaser.Scene {
       return;
     }
 
-    if (horizontal !== this.#facing && this.#playerBody.blocked.down && Math.abs(this.#playerBody.velocity.x) > 20) {
+    if (
+      horizontal !== this.#facing &&
+      this.#playerBody.blocked.down &&
+      Math.abs(this.#playerBody.velocity.x) > 20
+    ) {
       this.#playAnimation('turnAround', true);
     }
 
@@ -698,12 +743,17 @@ export class FinalLevelScene extends Phaser.Scene {
 
     this.#jumpBufferedAt = -Infinity;
     this.#jumpCount += 1;
-    this.#playerBody.setVelocityY(this.#jumpCount > 1 ? -JUMP_SPEED * DOUBLE_JUMP_MULTIPLIER : -JUMP_SPEED);
+    this.#playerBody.setVelocityY(
+      this.#jumpCount > 1 ? -JUMP_SPEED * DOUBLE_JUMP_MULTIPLIER : -JUMP_SPEED
+    );
     this.#playAnimation(this.#jumpCount > 1 ? 'jumpInBetween' : 'jumpStart', true);
   }
 
   #tryAttack(): void {
-    if (!Phaser.Input.Keyboard.JustDown(this.#keys.x) && !Phaser.Input.Keyboard.JustDown(this.#keys.j)) {
+    if (
+      !Phaser.Input.Keyboard.JustDown(this.#keys.x) &&
+      !Phaser.Input.Keyboard.JustDown(this.#keys.j)
+    ) {
       return;
     }
 
@@ -751,7 +801,10 @@ export class FinalLevelScene extends Phaser.Scene {
       Phaser.Geom.Intersects.RectangleToRectangle(attackZone, boss.sprite.getBounds())
     ) {
       const hit = this.#rollPlayerHit();
-      const appliedDamage = boss.hurt(hit.damage, { critical: hit.isCritical, stagger: hit.stagger });
+      const appliedDamage = boss.hurt(hit.damage, {
+        critical: hit.isCritical,
+        stagger: hit.stagger
+      });
       this.#attackHitTargets.add(boss);
       if (appliedDamage > 0) {
         this.#applyHitStop();
@@ -837,7 +890,8 @@ export class FinalLevelScene extends Phaser.Scene {
     }
 
     trap.markDamaged(this.time.now);
-    const damage = trap.type === 'axe' ? gameplayConfig.traps.axe.damage : gameplayConfig.traps.spike.damage;
+    const damage =
+      trap.type === 'axe' ? gameplayConfig.traps.axe.damage : gameplayConfig.traps.spike.damage;
     this.#damagePlayer(damage, this.time.now, {
       knockbackX: trap.type === 'axe' ? 150 : 95,
       knockbackY: trap.type === 'axe' ? -155 : -125
@@ -866,7 +920,8 @@ export class FinalLevelScene extends Phaser.Scene {
     knockback: Readonly<{ sourceX?: number; knockbackX: number; knockbackY: number }>
   ): void {
     this.#hitUntil = time + HIT_LOCK_MS;
-    const direction = knockback.sourceX === undefined ? -this.#facing : this.#player.x < knockback.sourceX ? -1 : 1;
+    const direction =
+      knockback.sourceX === undefined ? -this.#facing : this.#player.x < knockback.sourceX ? -1 : 1;
     this.#playerBody.setAccelerationX(0);
     this.#playerBody.setVelocityX(direction * knockback.knockbackX);
     this.#playerBody.setVelocityY(knockback.knockbackY);
@@ -955,9 +1010,12 @@ export class FinalLevelScene extends Phaser.Scene {
     this.#player.play(`player.${animation}`, true);
 
     if (animation === 'turnAround') {
-      this.#player.once(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'player.turnAround', () => {
-        this.#currentAnimation = null;
-      });
+      this.#player.once(
+        Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'player.turnAround',
+        () => {
+          this.#currentAnimation = null;
+        }
+      );
     }
   }
 }
@@ -999,7 +1057,12 @@ function platform(kind: TerrainKind, x: number, y: number): Terrain {
   return { kind, x, y };
 }
 
-function enemy(type: EnemyType, x: number, patrolLeft: number, patrolRight: number): EnemySpawnConfig {
+function enemy(
+  type: EnemyType,
+  x: number,
+  patrolLeft: number,
+  patrolRight: number
+): EnemySpawnConfig {
   return {
     type,
     x,
