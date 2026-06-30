@@ -2,9 +2,9 @@
 
 DK is a web-based 2D platformer built with Phaser, TypeScript, Vite, npm, Vercel, and GitHub Actions.
 
-Current version: `v1.0-final-test`
+Current version: `v1.1-final-test`
 
-This build contains the frozen final-test content: Map 1, Map 2, Map 3, and the final boss arena using only approved assets, animations, controllers, collisions, and gameplay systems.
+This build contains the frozen v1.1 final-test content: compressed Map 1, Map 2, Map 3, and the final boss arena using only approved assets, animations, controllers, collisions, and gameplay systems.
 
 ## Requirements
 
@@ -59,10 +59,10 @@ Source code lives in `src/` and is organized around engine infrastructure:
 
 ## Gameplay Content
 
-- Map 1: Green Start with tutorial, Snake, Spike trap, finish transition
-- Map 2: Ruin Crossing with Hyena, Scorpio, Trap_Exe, mixed combat
-- Map 3: Final Ascent with movement challenge, enemies, traps, Vulture, boss gate
-- Final Boss Arena: approved boss only, no extra enemies or hazards
+- Map 1: Green Start, compressed to roughly 90 seconds with tutorial, denser Snake, Spike, and platform checks
+- Map 2: Ruin Crossing, compressed to roughly 90 seconds with denser Hyena, Scorpio, Trap_Exe, Spike, and mixed combat
+- Map 3: Final Ascent, compressed to roughly 90 seconds with denser enemy, trap, platform, Vulture, and boss gate pacing
+- Final Boss Arena: roughly 120 seconds, approved boss only, no extra enemies or hazards
 
 Approved systems included in this final-test build:
 

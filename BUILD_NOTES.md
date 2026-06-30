@@ -1,14 +1,14 @@
 # Build Notes
 
-Version: `v1.0-final-test`
+Version: `v1.1-final-test`
 
 Date: 2026-06-30
 
 ## Scope
 
-Final playable test build for DK.
+Final playable v1.1 test build for DK.
 
-Content is frozen for this build. No new assets, visual redesigns, animation replacements, or gameplay redesigns were added during the final validation pass.
+Content is frozen for this build. No new assets, visual redesigns, animation replacements, or gameplay redesigns were added during this refinement pass.
 
 ## Included Content
 
@@ -45,8 +45,7 @@ Final validation status:
 - `npm run lint`: passed
 - `npm run typecheck`: passed
 - `npm run build`: passed
-- Production preview: loaded at `http://127.0.0.1:4173/`
-- Browser console errors: none observed during preview load
+- Production preview: loaded at `http://127.0.0.1:4173/` with HTTP 200
 - Required approved asset files: present
 - Production output: `dist/index.html` present
 
@@ -54,6 +53,10 @@ Final validation status:
 
 - Production boot starts at Map 1.
 - Map flow is Map 1 -> Map 2 -> Map 3 -> Final Boss.
+- Maps 1-3 were compressed to roughly 90 seconds each.
+- Encounter spacing was reduced so gameplay appears more continuously.
+- Enemy, trap, and floating platform density were increased using approved content only.
+- Boss HP and attack values were reduced for the roughly 120-second final boss target.
 - Player death plays the approved death animation, fades, and restarts the current map.
 - Final boss defeat opens the victory finish state.
 

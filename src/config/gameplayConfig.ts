@@ -51,16 +51,16 @@ export const gameplayConfig = {
     }
   },
   boss: {
-    hp: 500,
+    hp: 220,
     scale: 3,
     groundSpeed: 65,
     touchDamage: 10,
-    attack1Damage: 20,
-    attack2Damage: 30,
-    specialDamage: 40,
+    attack1Damage: 18,
+    attack2Damage: 25,
+    specialDamage: 35,
     playerHitKnockbackX: 0,
     playerHitKnockbackY: 0,
-    deathRemoveMs: 1500,
+    deathRemoveMs: 1200,
     deathFadeMs: 500
   },
   tutorial: {

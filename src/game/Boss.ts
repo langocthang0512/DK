@@ -1,9 +1,6 @@
 import Phaser from 'phaser';
 
-import {
-  type BossAnimationState,
-  getBossAnimationKey
-} from '@assets/bossAssets';
+import { type BossAnimationState, getBossAnimationKey } from '@assets/bossAssets';
 import { gameplayConfig } from '@config/gameplayConfig';
 
 type BossMode = 'ground' | 'takingOff' | 'flying' | 'landing' | 'hurt' | 'dead' | 'attacking';
@@ -13,9 +10,9 @@ const GROUND_MOVE_SPEED = gameplayConfig.boss.groundSpeed;
 const FLIGHT_OFFSET_Y = 110;
 const BOSS_MAX_HEALTH: number = gameplayConfig.boss.hp;
 const bossPhaseStagger = {
-  1: 300,
-  2: 220,
-  3: 150
+  1: 220,
+  2: 160,
+  3: 110
 } as const;
 const bossPhaseArmor = {
   1: 0.3,
@@ -54,7 +51,12 @@ export class Boss {
     private readonly player: Phaser.Physics.Arcade.Sprite,
     x: number,
     y: number,
-    private readonly arena: Readonly<{ left: number; right: number; groundY: number; ceilingY: number }>
+    private readonly arena: Readonly<{
+      left: number;
+      right: number;
+      groundY: number;
+      ceilingY: number;
+    }>
   ) {
     this.sprite = scene.physics.add
       .sprite(x, y, getBossAnimationKey('idle'), 0)
@@ -85,11 +87,11 @@ export class Boss {
   }
 
   get phase(): 1 | 2 | 3 {
-    if (this.#health > 350) {
+    if (this.#health > 150) {
       return 1;
     }
 
-    return this.#health > 150 ? 2 : 3;
+    return this.#health > 70 ? 2 : 3;
   }
 
   get stagger(): number {
@@ -109,7 +111,9 @@ export class Boss {
       return gameplayConfig.boss.attack1Damage;
     }
 
-    return this.#state === 'attack2' ? gameplayConfig.boss.attack2Damage : gameplayConfig.boss.specialDamage;
+    return this.#state === 'attack2'
+      ? gameplayConfig.boss.attack2Damage
+      : gameplayConfig.boss.specialDamage;
   }
 
   get isAttackActive(): boolean {
@@ -153,7 +157,10 @@ export class Boss {
 
     const recoverMode: BossMode = this.#mode === 'flying' ? 'flying' : 'ground';
     const criticalAdjustedDamage = options.critical ? damage * 0.5 + damage * 0.5 * 1.5 : damage;
-    const appliedDamage = Math.max(1, Math.round(criticalAdjustedDamage * (1 - bossPhaseArmor[this.phase])));
+    const appliedDamage = Math.max(
+      1,
+      Math.round(criticalAdjustedDamage * (1 - bossPhaseArmor[this.phase]))
+    );
     this.#health -= appliedDamage;
     this.#stagger = Math.min(this.maxStagger, this.#stagger + (options.stagger ?? 25));
 
@@ -169,14 +176,17 @@ export class Boss {
     if (this.#stagger >= this.maxStagger) {
       this.#stagger = 0;
     }
-    this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + getBossAnimationKey('hurt'), () => {
-      if (!this.isDead) {
-        this.#mode = recoverMode;
-        if (recoverMode === 'ground') {
-          this.#snapToGround();
+    this.sprite.once(
+      Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + getBossAnimationKey('hurt'),
+      () => {
+        if (!this.isDead) {
+          this.#mode = recoverMode;
+          if (recoverMode === 'ground') {
+            this.#snapToGround();
+          }
         }
       }
-    });
+    );
 
     return appliedDamage;
   }
@@ -191,25 +201,26 @@ export class Boss {
       return;
     }
 
-    if (time >= this.#nextFlightAt && absDistance > 260) {
+    if (this.phase >= 2 && time >= this.#nextFlightAt && absDistance > 300) {
       this.#takeOff(time);
       return;
     }
 
-    if (time >= this.#nextSpecialAt && absDistance < 520) {
-      this.#attack('special', time, 2600);
+    if (this.phase === 3 && time >= this.#nextSpecialAt && absDistance < 520) {
+      this.#attack('special', time, 1200);
       return;
     }
 
     if (time >= this.#nextAttackAt && absDistance < 260) {
-      this.#attack(absDistance < 150 ? 'attack1' : 'attack2', time, 900);
+      this.#attack(this.phase === 1 || absDistance < 150 ? 'attack1' : 'attack2', time, 1200);
       return;
     }
 
     if (absDistance > 130) {
       this.#play('walk');
       this.sprite.x = Phaser.Math.Clamp(
-        this.sprite.x + Math.sign(distance) * GROUND_MOVE_SPEED * (this.scene.game.loop.delta / 1000),
+        this.sprite.x +
+          Math.sign(distance) * GROUND_MOVE_SPEED * (this.scene.game.loop.delta / 1000),
         this.arena.left,
         this.arena.right
       );
@@ -221,13 +232,25 @@ export class Boss {
   }
 
   #updateFlight(time: number): void {
-    const targetX = Phaser.Math.Clamp(this.player.x + this.#facing * -120, this.arena.left + 160, this.arena.right - 160);
-    const targetY = Phaser.Math.Clamp(this.arena.groundY - FLIGHT_OFFSET_Y, this.arena.ceilingY, this.arena.groundY - 80);
+    const targetX = Phaser.Math.Clamp(
+      this.player.x + this.#facing * -120,
+      this.arena.left + 160,
+      this.arena.right - 160
+    );
+    const targetY = Phaser.Math.Clamp(
+      this.arena.groundY - FLIGHT_OFFSET_Y,
+      this.arena.ceilingY,
+      this.arena.groundY - 80
+    );
     this.body.setVelocity((targetX - this.sprite.x) * 0.8, (targetY - this.sprite.y) * 0.7);
     this.#play('flight');
 
-    if (time >= this.#nextSpecialAt && Math.abs(this.player.x - this.sprite.x) < 430) {
-      this.#attack('special', time, 2600);
+    if (
+      this.phase === 3 &&
+      time >= this.#nextSpecialAt &&
+      Math.abs(this.player.x - this.sprite.x) < 430
+    ) {
+      this.#attack('special', time, 1200);
       return;
     }
 
@@ -242,31 +265,45 @@ export class Boss {
     this.#snapToGround();
     this.#play('takeOff', true);
     this.#snapToGround();
-    this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + getBossAnimationKey('takeOff'), () => {
-      if (this.isDead) {
-        return;
-      }
+    this.sprite.once(
+      Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + getBossAnimationKey('takeOff'),
+      () => {
+        if (this.isDead) {
+          return;
+        }
 
-      this.#mode = 'flying';
-      this.sprite.y = Phaser.Math.Clamp(this.arena.groundY - FLIGHT_OFFSET_Y, this.arena.ceilingY, this.arena.groundY - 80);
-      this.#landAt = time + 3400;
-    });
+        this.#mode = 'flying';
+        this.sprite.y = Phaser.Math.Clamp(
+          this.arena.groundY - FLIGHT_OFFSET_Y,
+          this.arena.ceilingY,
+          this.arena.groundY - 80
+        );
+        this.#landAt = time + (this.phase === 3 ? 1900 : 2600);
+      }
+    );
   }
 
   #land(): void {
     this.#mode = 'landing';
     this.body.setVelocity(0, 0);
-    this.sprite.y = Phaser.Math.Clamp(this.arena.groundY - FLIGHT_OFFSET_Y, this.arena.ceilingY, this.arena.groundY - 80);
+    this.sprite.y = Phaser.Math.Clamp(
+      this.arena.groundY - FLIGHT_OFFSET_Y,
+      this.arena.ceilingY,
+      this.arena.groundY - 80
+    );
     this.#play('landing', true);
-    this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + getBossAnimationKey('landing'), () => {
-      if (this.isDead) {
-        return;
-      }
+    this.sprite.once(
+      Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + getBossAnimationKey('landing'),
+      () => {
+        if (this.isDead) {
+          return;
+        }
 
-      this.#snapToGround();
-      this.#mode = 'ground';
-      this.#nextFlightAt = this.scene.time.now + 7000;
-    });
+        this.#snapToGround();
+        this.#mode = 'ground';
+        this.#nextFlightAt = this.scene.time.now + 9000;
+      }
+    );
   }
 
   #attack(state: 'attack1' | 'attack2' | 'special', time: number, cooldown: number): void {
@@ -276,16 +313,20 @@ export class Boss {
     this.#nextAttackAt = time + cooldown;
 
     if (state === 'special') {
-      this.#nextSpecialAt = time + 5200;
+      this.#nextSpecialAt = time + Phaser.Math.Between(10_000, 15_000);
     }
 
-    this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + getBossAnimationKey(state), () => {
-      if (this.isDead) {
-        return;
-      }
+    this.sprite.once(
+      Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + getBossAnimationKey(state),
+      () => {
+        if (this.isDead) {
+          return;
+        }
 
-      this.#mode = state === 'special' && this.sprite.y < this.arena.groundY - 40 ? 'flying' : 'ground';
-    });
+        this.#mode =
+          state === 'special' && this.sprite.y < this.arena.groundY - 40 ? 'flying' : 'ground';
+      }
+    );
   }
 
   #die(): void {
