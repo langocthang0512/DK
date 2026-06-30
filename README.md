@@ -2,9 +2,9 @@
 
 DK is a web-based 2D platformer built with Phaser, TypeScript, Vite, npm, Vercel, and GitHub Actions.
 
-Current version: `v1.1-final-test`
+Current version: `v1.2-final-test`
 
-This build contains the frozen v1.1 final-test content: compressed Map 1, Map 2, Map 3, and the final boss arena using only approved assets, animations, controllers, collisions, and gameplay systems.
+This build contains the frozen v1.2 final-test content: redesigned dense Map 1, Map 2, Map 3, and dedicated Map 4 boss arena using only approved assets, animations, controllers, collisions, and gameplay systems.
 
 ## Requirements
 
@@ -59,10 +59,10 @@ Source code lives in `src/` and is organized around engine infrastructure:
 
 ## Gameplay Content
 
-- Map 1: Green Start, compressed to roughly 90 seconds with tutorial, denser Snake, Spike, and platform checks
-- Map 2: Ruin Crossing, compressed to roughly 90 seconds with denser Hyena, Scorpio, Trap_Exe, Spike, and mixed combat
-- Map 3: Final Ascent, compressed to roughly 90 seconds with denser enemy, trap, platform, Vulture, and boss gate pacing
-- Final Boss Arena: roughly 120 seconds, approved boss only, no extra enemies or hazards
+- Map 1: Green Start, roughly 90 seconds with tutorial, platform combat, Snake, Hyena, Scorpio, Spike, and Trap_Exe checks
+- Map 2: Ruin Crossing, roughly 90 seconds with denser Hyena, Scorpio, Snake, Trap_Exe, Spike, and mixed platform combat
+- Map 3: Final Ascent, roughly 90 seconds with vertical combat, Vulture, mixed enemies, dense traps, and Map 4 gate
+- Map 4: dedicated final boss arena, roughly 120 seconds, approved boss only, no extra enemies or hazards
 
 Approved systems included in this final-test build:
 
@@ -71,6 +71,8 @@ Approved systems included in this final-test build:
 - Snake, Hyena, Scorpio, Vulture AI and cleanup
 - Trap_Spike and Trap_Exe trigger/damage timing
 - Boss movement, attacks, phases, damage reaction, death cleanup
+- Enemy and boss HP bars
+- Permanent Dragon Knight player HUD
 - Tutorial text on Map 1 only
 - Camera follow, look-ahead, transitions, boss arena zoom
 

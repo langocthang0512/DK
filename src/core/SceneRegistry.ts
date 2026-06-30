@@ -1,7 +1,7 @@
 import type Phaser from 'phaser';
 
 import { BootScene } from '@scenes/BootScene';
-import { FinalBossScene, Map1Scene, Map2Scene, Map3Scene } from '@scenes/FinalLevelScene';
+import { Map1Scene, Map2Scene, Map3Scene, Map4Scene } from '@scenes/FinalLevelScene';
 import { ProductionScene } from '@scenes/ProductionScene';
 import { SceneKey } from '@scenes/SceneKey';
 
@@ -32,7 +32,7 @@ export const sceneRegistry = [
     scene: Map3Scene
   },
   {
-    key: SceneKey.FinalBoss,
-    scene: FinalBossScene
+    key: SceneKey.Map4,
+    scene: Map4Scene
   }
 ] as const satisfies readonly SceneRegistration[];

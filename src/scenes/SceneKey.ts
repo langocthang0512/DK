@@ -4,6 +4,7 @@ export enum SceneKey {
   Map1 = 'map-1',
   Map2 = 'map-2',
   Map3 = 'map-3',
+  Map4 = 'map-4',
   FinalBoss = 'final-boss',
   CharacterDemo = 'character-demo',
   EnemyTest = 'enemy-test',

@@ -1,12 +1,12 @@
 # Build Notes
 
-Version: `v1.1-final-test`
+Version: `v1.2-final-test`
 
 Date: 2026-06-30
 
 ## Scope
 
-Final playable v1.1 test build for DK.
+Final playable v1.2 test build for DK.
 
 Content is frozen for this build. No new assets, visual redesigns, animation replacements, or gameplay redesigns were added during this refinement pass.
 
@@ -15,7 +15,7 @@ Content is frozen for this build. No new assets, visual redesigns, animation rep
 - Map 1: Green Start
 - Map 2: Ruin Crossing
 - Map 3: Final Ascent
-- Final Boss Arena
+- Map 4: Final Boss Arena
 
 Approved content used:
 
@@ -30,6 +30,8 @@ Approved content used:
 - Trap_Exe
 - Boss
 - Tutorial text
+- Enemy and boss HP bars
+- Dragon Knight HUD
 - Camera, combat, movement, death, fade, and scene transitions
 
 ## Validation Commands
@@ -52,11 +54,16 @@ Final validation status:
 ## Release Notes
 
 - Production boot starts at Map 1.
-- Map flow is Map 1 -> Map 2 -> Map 3 -> Final Boss.
-- Maps 1-3 were compressed to roughly 90 seconds each.
-- Encounter spacing was reduced so gameplay appears more continuously.
+- Map flow is Map 1 -> Map 2 -> Map 3 -> Map 4.
+- Map 4 is a dedicated boss-only scene.
+- Maps 1-3 were redesigned for dense roughly 90-second pacing.
 - Enemy, trap, and floating platform density were increased using approved content only.
-- Boss HP and attack values were reduced for the roughly 120-second final boss target.
+- Enemies now appear on ground, on floating platforms, near traps, and between platform transitions.
+- Trap_Exe placements are paired under floating platforms.
+- Trap_Spike can trigger immediate damage as spikes emerge.
+- Enemy and boss HP bars were added.
+- Permanent Dragon Knight HUD was added.
+- Boss remains tuned for the roughly 120-second final boss target.
 - Player death plays the approved death animation, fades, and restarts the current map.
 - Final boss defeat opens the victory finish state.
 

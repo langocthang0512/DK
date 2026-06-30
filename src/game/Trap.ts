@@ -75,9 +75,12 @@ export class Trap {
     this.scene.time.delayedCall(delay, () => {
       this.sprite.setVisible(true);
       this.sprite.play(getTrapAnimationKey(this.config.type), true);
-      this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + getTrapAnimationKey(this.config.type), () => {
-        this.#completeCycle();
-      });
+      this.sprite.once(
+        Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + getTrapAnimationKey(this.config.type),
+        () => {
+          this.#completeCycle();
+        }
+      );
     });
   }
 
@@ -103,9 +106,23 @@ export class Trap {
   canDamage(time: number): boolean {
     const definition = trapDefinitions[this.config.type];
     const frame = this.#currentZeroBasedFrame();
-    const hasDamageFrame = frame >= definition.damageFrameStart && frame <= definition.damageFrameEnd;
+    const hasDamageFrame =
+      frame >= definition.damageFrameStart && frame <= definition.damageFrameEnd;
 
-    return hasDamageFrame && time - this.#lastDamageAt >= (this.config.cooldownMs ?? gameplayConfig.traps[this.config.type].cooldownMs);
+    return (
+      hasDamageFrame &&
+      time - this.#lastDamageAt >=
+        (this.config.cooldownMs ?? gameplayConfig.traps[this.config.type].cooldownMs)
+    );
+  }
+
+  canTriggerDamage(time: number): boolean {
+    return (
+      this.config.type === 'spike' &&
+      this.#isRunning &&
+      time >= this.#triggeredAt &&
+      time - this.#lastDamageAt >= (this.config.cooldownMs ?? gameplayConfig.traps.spike.cooldownMs)
+    );
   }
 
   markDamaged(time: number): void {
@@ -132,7 +149,10 @@ export class Trap {
       return;
     }
 
-    if (!player || !Phaser.Geom.Intersects.RectangleToRectangle(this.trigger.getBounds(), player.getBounds())) {
+    if (
+      !player ||
+      !Phaser.Geom.Intersects.RectangleToRectangle(this.trigger.getBounds(), player.getBounds())
+    ) {
       this.#isArmed = true;
     }
   }
