@@ -1,7 +1,7 @@
 {
   "name": "dk",
   "private": true,
-  "version": "1.2.0-final-test",
+  "version": "1.2.1-bugfix",
   "type": "module",
   "description": "Production-grade foundation for the DK web game.",
   "scripts": {

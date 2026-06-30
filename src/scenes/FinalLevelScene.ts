@@ -106,6 +106,8 @@ const PLAYER_ATTACK_RANGE = 92;
 const NORMAL_STAGGER = 25;
 const CRITICAL_STAGGER = 40;
 const HIT_STOP_MS = 80;
+const HEALTH_BAR_GAP = 8;
+const PLATFORM_ENEMY_FOOT_OFFSET = 8;
 
 const terrainDefinitions = {
   ground: {
@@ -200,15 +202,15 @@ const map1Config: LevelConfig = {
   traps: [
     spike(3_800),
     axe(5_130, platformBottom('vinePlatform', 355)),
-    spikeAt(5_070, vineSurface(355), 180),
+    spikeOnPlatform('vinePlatform', 5_050, 355, 180),
     spike(6_100, 130),
-    spikeAt(6_990, smallSurface(340)),
+    spikeOnPlatform('smallPlatform', 6_920, 340),
     axe(8_260, platformBottom('vinePlatform', 390)),
     spike(9_450),
-    spikeAt(11_360, smallSurface(340), 120),
+    spikeOnPlatform('smallPlatform', 11_300, 340, 120),
     axe(13_370, platformBottom('vinePlatform', 390)),
     spike(15_400),
-    spikeAt(17_360, smallSurface(335), 180)
+    spikeOnPlatform('smallPlatform', 17_300, 335, 180)
   ],
   tutorial: [
     { text: 'MOVE', x: 620, y: 486 },
@@ -269,23 +271,23 @@ const map2Config: LevelConfig = {
   traps: [
     spike(2_980),
     axe(3_560, platformBottom('smallPlatform', 405)),
-    spikeAt(3_520, smallSurface(405), 140),
+    spikeOnPlatform('smallPlatform', 3_450, 405, 140),
     spike(4_380, 160),
     axe(5_830, platformBottom('smallPlatform', 350)),
     spike(6_900),
     axe(7_220, platformBottom('vinePlatform', 390)),
-    spikeAt(7_170, vineSurface(390), 180),
+    spikeOnPlatform('vinePlatform', 7_100, 390, 180),
     spike(8_920, 130),
     axe(9_820, platformBottom('smallPlatform', 345)),
-    spikeAt(9_790, smallSurface(345)),
+    spikeOnPlatform('smallPlatform', 9_720, 345),
     spike(11_020),
     axe(11_910, platformBottom('smallPlatform', 330)),
     spike(12_900, 180),
     axe(13_770, platformBottom('vinePlatform', 395)),
-    spikeAt(13_730, vineSurface(395), 100),
+    spikeOnPlatform('vinePlatform', 13_650, 395, 100),
     spike(15_350),
     axe(16_360, platformBottom('vinePlatform', 395)),
-    spikeAt(16_330, vineSurface(395), 180),
+    spikeOnPlatform('vinePlatform', 16_250, 395, 180),
     axe(18_870, platformBottom('vinePlatform', 390)),
     spike(20_240, 150)
   ]
@@ -344,29 +346,29 @@ const map3Config: LevelConfig = {
   traps: [
     spike(2_520),
     axe(2_300, platformBottom('vinePlatform', 360)),
-    spikeAt(2_260, vineSurface(360), 150),
+    spikeOnPlatform('vinePlatform', 2_200, 360, 150),
     spike(3_680, 180),
     axe(4_750, platformBottom('vinePlatform', 350)),
-    spikeAt(4_700, vineSurface(350)),
+    spikeOnPlatform('vinePlatform', 4_650, 350),
     spike(5_980),
     axe(7_180, platformBottom('smallPlatform', 360)),
-    spikeAt(7_150, smallSurface(360), 140),
+    spikeOnPlatform('smallPlatform', 7_080, 360, 140),
     spike(8_650),
     axe(9_270, platformBottom('vinePlatform', 395)),
-    spikeAt(9_230, vineSurface(395)),
+    spikeOnPlatform('vinePlatform', 9_150, 395),
     spike(10_750, 120),
     axe(12_560, platformBottom('smallPlatform', 330)),
-    spikeAt(12_530, smallSurface(330), 160),
+    spikeOnPlatform('smallPlatform', 12_480, 330, 160),
     spike(13_850),
     axe(14_460, platformBottom('vinePlatform', 395)),
     spike(15_900, 180),
     axe(16_820, platformBottom('vinePlatform', 390)),
-    spikeAt(16_780, vineSurface(390)),
+    spikeOnPlatform('vinePlatform', 16_700, 390),
     spike(18_400),
     axe(19_160, platformBottom('vinePlatform', 385)),
     spike(20_680, 130),
     axe(21_400, platformBottom('vinePlatform', 380)),
-    spikeAt(21_360, vineSurface(380), 180)
+    spikeOnPlatform('vinePlatform', 21_250, 380, 180)
   ]
 };
 
@@ -742,7 +744,7 @@ export class FinalLevelScene extends Phaser.Scene {
       graphics: this.add.graphics().setDepth(60),
       maxHealth: enemy.definition.health,
       width: Phaser.Math.Clamp(enemy.sprite.displayWidth * 0.7, 32, 86),
-      yOffset: enemy.sprite.displayHeight + 16,
+      yOffset: enemy.sprite.displayHeight + HEALTH_BAR_GAP,
       displayedRatio: 1
     }));
 
@@ -752,7 +754,7 @@ export class FinalLevelScene extends Phaser.Scene {
         graphics: this.add.graphics().setDepth(60),
         maxHealth: gameplayConfig.boss.hp,
         width: Phaser.Math.Clamp(this.#boss.sprite.displayWidth * 0.72, 160, 320),
-        yOffset: this.#boss.sprite.displayHeight + 24,
+        yOffset: this.#boss.sprite.displayHeight + HEALTH_BAR_GAP,
         displayedRatio: 1
       });
     }
@@ -1293,7 +1295,7 @@ function enemyAt(
   return {
     type,
     x,
-    y,
+    y: y + PLATFORM_ENEMY_FOOT_OFFSET,
     patrolLeft,
     patrolRight
   };
@@ -1312,6 +1314,16 @@ function spikeAt(x: number, anchorY: number, delayMs = 0): TrapSpawnConfig {
     delayMs,
     cooldownMs: gameplayConfig.traps.spike.cooldownMs
   };
+}
+
+function spikeOnPlatform(
+  kind: TerrainKind,
+  platformX: number,
+  platformY: number,
+  delayMs = 0
+): TrapSpawnConfig {
+  const definition = terrainDefinitions[kind];
+  return spikeAt(platformX + definition.width / 2, platformSurface(kind, platformY), delayMs);
 }
 
 function axe(x: number, anchorY: number): TrapSpawnConfig {

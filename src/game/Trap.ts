@@ -15,6 +15,8 @@ export type TrapSpawnConfig = Readonly<{
 
 const DEFAULT_TRIGGER_WIDTH = 220;
 const DEFAULT_TRIGGER_HEIGHT = 190;
+const IDLE_SPIKE_TIP_CROP_Y = 90;
+const IDLE_SPIKE_TIP_CROP_HEIGHT = 12;
 
 export class Trap {
   readonly sprite: Phaser.Physics.Arcade.Sprite;
@@ -25,6 +27,7 @@ export class Trap {
   #lastDamageAt = -Infinity;
   #isRunning = false;
   #isArmed = true;
+  #damagedThisCycle = false;
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -56,7 +59,7 @@ export class Trap {
     scene.physics.add.existing(this.hitbox, true);
     this.#alignToAnchor();
     this.#alignHitbox();
-    this.sprite.setVisible(!this.#isHiddenGroundTrap());
+    this.#applyIdleVisual();
   }
 
   get type(): TrapType {
@@ -71,9 +74,11 @@ export class Trap {
     const delay = this.config.delayMs ?? gameplayConfig.traps[this.config.type].activationDelayMs;
     this.#isRunning = true;
     this.#isArmed = false;
+    this.#damagedThisCycle = false;
     this.#triggeredAt = time + delay;
     this.scene.time.delayedCall(delay, () => {
       this.sprite.setVisible(true);
+      this.sprite.setCrop();
       this.sprite.play(getTrapAnimationKey(this.config.type), true);
       this.sprite.once(
         Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + getTrapAnimationKey(this.config.type),
@@ -89,13 +94,14 @@ export class Trap {
 
     if (!this.#isRunning || time < this.#triggeredAt) {
       this.sprite.setFrame(0);
-      this.sprite.setVisible(!this.#isHiddenGroundTrap());
+      this.#applyIdleVisual();
       this.#alignToAnchor();
       this.#alignHitbox();
       return;
     }
 
     if (!this.sprite.anims.isPlaying) {
+      this.sprite.setCrop();
       this.sprite.play(getTrapAnimationKey(this.config.type), true);
     }
 
@@ -108,8 +114,10 @@ export class Trap {
     const frame = this.#currentZeroBasedFrame();
     const hasDamageFrame =
       frame >= definition.damageFrameStart && frame <= definition.damageFrameEnd;
+    const canDamageThisCycle = this.config.type !== 'spike' || !this.#damagedThisCycle;
 
     return (
+      canDamageThisCycle &&
       hasDamageFrame &&
       time - this.#lastDamageAt >=
         (this.config.cooldownMs ?? gameplayConfig.traps[this.config.type].cooldownMs)
@@ -120,6 +128,7 @@ export class Trap {
     return (
       this.config.type === 'spike' &&
       this.#isRunning &&
+      !this.#damagedThisCycle &&
       time >= this.#triggeredAt &&
       time - this.#lastDamageAt >= (this.config.cooldownMs ?? gameplayConfig.traps.spike.cooldownMs)
     );
@@ -127,6 +136,9 @@ export class Trap {
 
   markDamaged(time: number): void {
     this.#lastDamageAt = time;
+    if (this.config.type === 'spike') {
+      this.#damagedThisCycle = true;
+    }
   }
 
   #completeCycle(): void {
@@ -138,7 +150,8 @@ export class Trap {
     this.#triggeredAt = -Infinity;
     this.sprite.stop();
     this.sprite.setFrame(0);
-    this.sprite.setVisible(!this.#isHiddenGroundTrap());
+    this.#damagedThisCycle = false;
+    this.#applyIdleVisual();
     this.#alignToAnchor();
 
     this.#isArmed = false;
@@ -167,6 +180,22 @@ export class Trap {
     }
 
     this.sprite.y = this.config.anchorY - padding * definition.scale;
+  }
+
+  #applyIdleVisual(): void {
+    if (!this.#isHiddenGroundTrap()) {
+      this.sprite.setCrop();
+      this.sprite.setVisible(true);
+      return;
+    }
+
+    this.sprite.setVisible(true);
+    this.sprite.setCrop(
+      0,
+      IDLE_SPIKE_TIP_CROP_Y,
+      trapDefinitions.spike.frameWidth,
+      IDLE_SPIKE_TIP_CROP_HEIGHT
+    );
   }
 
   #alignHitbox(): void {
@@ -204,6 +233,9 @@ export class Trap {
 
   #isHiddenGroundTrap(): boolean {
     const definition = trapDefinitions[this.config.type];
-    return definition.placement === 'ground' && !this.#isRunning;
+    return (
+      definition.placement === 'ground' &&
+      (!this.#isRunning || this.scene.time.now < this.#triggeredAt)
+    );
   }
 }

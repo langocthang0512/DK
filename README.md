@@ -2,9 +2,9 @@
 
 DK is a web-based 2D platformer built with Phaser, TypeScript, Vite, npm, Vercel, and GitHub Actions.
 
-Current version: `v1.2-final-test`
+Current version: `v1.2.1-bugfix`
 
-This build contains the frozen v1.2 final-test content: redesigned dense Map 1, Map 2, Map 3, and dedicated Map 4 boss arena using only approved assets, animations, controllers, collisions, and gameplay systems.
+This build contains the frozen v1.2.1 bugfix content: redesigned dense Map 1, Map 2, Map 3, and dedicated Map 4 boss arena using only approved assets, animations, controllers, collisions, and gameplay systems.
 
 ## Requirements
 
@@ -75,6 +75,14 @@ Approved systems included in this final-test build:
 - Permanent Dragon Knight player HUD
 - Tutorial text on Map 1 only
 - Camera follow, look-ahead, transitions, boss arena zoom
+
+Bugfix patch v1.2.1:
+
+- Enemy and boss HP bars sit closer to sprite heads.
+- Floating-platform enemy feet are anchored closer to platform surfaces.
+- Floating-platform Spike traps are centered on their platform.
+- Spike traps can damage only once per emergence cycle.
+- Idle Spike traps show a small visible warning tip.
 
 ## Deployment
 

@@ -1,14 +1,14 @@
 # Build Notes
 
-Version: `v1.2-final-test`
+Version: `v1.2.1-bugfix`
 
 Date: 2026-06-30
 
 ## Scope
 
-Final playable v1.2 test build for DK.
+Playable v1.2.1 bugfix build for DK.
 
-Content is frozen for this build. No new assets, visual redesigns, animation replacements, or gameplay redesigns were added during this refinement pass.
+Content is frozen for this build. No new assets, visual redesigns, animation replacements, gameplay redesigns, balance changes, object count changes, or map flow changes were added during this bugfix patch.
 
 ## Included Content
 
@@ -53,6 +53,12 @@ Final validation status:
 
 ## Release Notes
 
+- Strict bugfix patch only.
+- Enemy and boss HP bars were moved closer to sprite heads.
+- Floating-platform enemy foot anchoring was corrected.
+- Floating-platform Spike traps were centered on their platform surface.
+- Spike trap damage was limited to once per emergence cycle.
+- Spike traps now show a small idle warning tip.
 - Production boot starts at Map 1.
 - Map flow is Map 1 -> Map 2 -> Map 3 -> Map 4.
 - Map 4 is a dedicated boss-only scene.
