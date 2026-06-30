@@ -1,5 +1,8 @@
 export enum SceneKey {
   Boot = 'boot',
+  MainMenu = 'main-menu',
+  PauseMenu = 'pause-menu',
+  Ending = 'ending',
   Production = 'production',
   Map1 = 'map-1',
   Map2 = 'map-2',

@@ -2,9 +2,9 @@
 
 DK is a web-based 2D platformer built with Phaser, TypeScript, Vite, npm, Vercel, and GitHub Actions.
 
-Current version: `v1.2.3-change-patch`
+Current version: `v1.3-ui`
 
-This build contains the frozen v1.2.3 change-patch content: redesigned dense Map 1, Map 2, Map 3, and dedicated Map 4 boss arena using only approved assets, animations, controllers, collisions, and gameplay systems.
+This build contains the frozen v1.3 UI content: redesigned dense Map 1, Map 2, Map 3, and dedicated Map 4 boss arena using only approved assets, animations, controllers, collisions, and gameplay systems.
 
 ## Requirements
 
@@ -66,6 +66,7 @@ Source code lives in `src/` and is organized around engine infrastructure:
 
 Approved systems included in this final-test build:
 
+- Main Menu, Pause Menu, and Ending screen
 - Player movement, double jump, attack, hit, death, fade, map restart
 - Ground and floating platform collision
 - Snake, Hyena, Scorpio, Vulture AI and cleanup
@@ -100,6 +101,13 @@ Change patch v1.2.3:
 - Kept Hyena on ground-only placements.
 - Tightened Spike trap hitboxes to visible spike geometry.
 - Clamped floating platform enemy patrols to platform-safe bounds.
+
+UI patch v1.3:
+
+- Added a reference-matched Main Menu with START.
+- Added an in-game Pause Menu with RESUME and MAIN MENU.
+- Added an Ending screen after final victory with MAIN MENU.
+- Added keyboard and pointer support for clickable box UI buttons.
 
 ## Deployment
 

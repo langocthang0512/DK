@@ -1,14 +1,14 @@
 # Build Notes
 
-Version: `v1.2.3-change-patch`
+Version: `v1.3-ui`
 
 Date: 2026-06-30
 
 ## Scope
 
-Playable v1.2.3 change-patch build for DK.
+Playable v1.3 UI build for DK.
 
-Content is frozen for this build. No new assets, visual redesigns, animation replacements, gameplay redesigns, balance changes, object count changes, or map flow changes were added during this bugfix patch.
+Content is frozen for this build. No map, enemy, trap, boss, player, combat, balance, or pacing changes were added during this UI patch.
 
 ## Included Content
 
@@ -29,6 +29,9 @@ Approved content used:
 - Trap_Spike
 - Trap_Exe
 - Boss
+- Main Menu
+- Pause Menu
+- Ending screen
 - Tutorial text
 - Enemy and boss HP bars
 - Dragon Knight HUD
@@ -53,7 +56,11 @@ Final validation status:
 
 ## Release Notes
 
-- Strict bugfix patch only.
+- Strict UI implementation patch only.
+- Added Main Menu with START, existing environment background, reference-style title, and clickable box button.
+- Added Pause Menu with dark overlay, RESUME, MAIN MENU, pointer support, and keyboard support.
+- Added Ending screen after final victory with YOU ARE THE LEGENDS and MAIN MENU.
+- Added shared pixel UI button styling with idle, hover, pressed, and keyboard focus states.
 - Player visual grounding was lowered to match approved enemy foot contact.
 - Enemy and boss HP bars were moved closer to sprite heads.
 - Floating-platform enemy foot anchoring was tightened.
@@ -65,8 +72,8 @@ Final validation status:
 - Hyena placements are ground-only.
 - Spike trap hitboxes were tightened to the visible spike geometry.
 - Floating platform enemy patrols are clamped to platform-safe bounds.
-- Production boot starts at Map 1.
-- Map flow is Map 1 -> Map 2 -> Map 3 -> Map 4.
+- Production boot starts at Main Menu.
+- Map flow is Main Menu -> Map 1 -> Map 2 -> Map 3 -> Map 4 -> Ending.
 - Map 4 is a dedicated boss-only scene.
 - Maps 1-3 were redesigned for dense roughly 90-second pacing.
 - Enemy, trap, and floating platform density were increased using approved content only.
@@ -77,7 +84,7 @@ Final validation status:
 - Permanent Dragon Knight HUD was added.
 - Boss remains tuned for the roughly 120-second final boss target.
 - Player death plays the approved death animation, fades, and restarts the current map.
-- Final boss defeat opens the victory finish state.
+- Final boss victory opens the Ending screen.
 
 ## Deployment
 

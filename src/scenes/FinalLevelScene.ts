@@ -37,6 +37,8 @@ type FinalLevelControls = Phaser.Types.Input.Keyboard.CursorKeys & {
   j: Phaser.Input.Keyboard.Key;
   x: Phaser.Input.Keyboard.Key;
   space: Phaser.Input.Keyboard.Key;
+  escape: Phaser.Input.Keyboard.Key;
+  p: Phaser.Input.Keyboard.Key;
 };
 
 type TerrainKind = 'ground' | 'smallPlatform' | 'vinePlatform';
@@ -467,6 +469,14 @@ export class FinalLevelScene extends Phaser.Scene {
       return;
     }
 
+    if (
+      Phaser.Input.Keyboard.JustDown(this.#keys.escape) ||
+      Phaser.Input.Keyboard.JustDown(this.#keys.p)
+    ) {
+      this.#openPauseMenu();
+      return;
+    }
+
     const grounded = this.#playerBody.blocked.down;
     if (grounded) {
       this.#lastGroundedAt = time;
@@ -773,7 +783,9 @@ export class FinalLevelScene extends Phaser.Scene {
       d: Phaser.Input.Keyboard.KeyCodes.D,
       j: Phaser.Input.Keyboard.KeyCodes.J,
       x: Phaser.Input.Keyboard.KeyCodes.X,
-      space: Phaser.Input.Keyboard.KeyCodes.SPACE
+      space: Phaser.Input.Keyboard.KeyCodes.SPACE,
+      escape: Phaser.Input.Keyboard.KeyCodes.ESC,
+      p: Phaser.Input.Keyboard.KeyCodes.P
     }) as FinalLevelControls;
   }
 
@@ -1204,14 +1216,26 @@ export class FinalLevelScene extends Phaser.Scene {
     this.#playerBody.setVelocity(0, 0);
     this.#playerBody.setAccelerationX(0);
     this.#statusText.setText(this.config.nextScene ? 'Loading next map' : 'Victory').setAlpha(0.95);
-    this.cameras.main.fadeOut(650, 0, 0, 0);
-    this.time.delayedCall(700, () => {
+    const fadeMs = this.config.nextScene ? 650 : 1000;
+    this.cameras.main.fadeOut(fadeMs, 0, 0, 0);
+    this.time.delayedCall(fadeMs + 50, () => {
       if (this.config.nextScene) {
         this.scene.start(this.config.nextScene);
       } else {
-        this.scene.restart();
+        this.scene.start(SceneKey.Ending);
       }
     });
+  }
+
+  #openPauseMenu(): void {
+    if (this.scene.isActive(SceneKey.PauseMenu)) {
+      return;
+    }
+
+    this.scene.launch(SceneKey.PauseMenu, {
+      parentScene: this.sys.settings.key
+    });
+    this.scene.pause();
   }
 
   #updateCameraLookAhead(): void {

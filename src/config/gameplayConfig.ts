@@ -4,7 +4,7 @@ export const gameplayConfig = {
   tileSize: TILE_SIZE,
   production: {
     testMode: false,
-    bootScene: 'map-1'
+    bootScene: 'main-menu'
   },
   player: {
     hp: 100,

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3-ui] - 2026-06-30
+
+### Added
+
+- Added Main Menu with START and existing environment background.
+- Added Pause Menu with RESUME and MAIN MENU.
+- Added Ending screen after final victory.
+- Added shared pixel clickable box button styling with hover, pressed, and keyboard focus states.
+
 ## [1.2.3-change-patch] - 2026-06-30
 
 ### Changed
