@@ -106,8 +106,9 @@ const PLAYER_ATTACK_RANGE = 92;
 const NORMAL_STAGGER = 25;
 const CRITICAL_STAGGER = 40;
 const HIT_STOP_MS = 80;
-const HEALTH_BAR_GAP = 8;
-const PLATFORM_ENEMY_FOOT_OFFSET = 8;
+const HEALTH_BAR_GAP = 5;
+const PLATFORM_ENEMY_FOOT_OFFSET = 14;
+const PLAYER_BODY_OFFSET_Y = 37;
 
 const terrainDefinitions = {
   ground: {
@@ -709,7 +710,7 @@ export class FinalLevelScene extends Phaser.Scene {
 
     this.#playerBody = this.#player.body as Phaser.Physics.Arcade.Body;
     this.#playerBody.setSize(19, 38);
-    this.#playerBody.setOffset(45, 42);
+    this.#playerBody.setOffset(45, PLAYER_BODY_OFFSET_Y);
     this.#playerBody.setMaxVelocity(MOVE_SPEED, 900);
     this.#playerBody.setDragX(MOVE_ACCELERATION);
 
@@ -1078,7 +1079,10 @@ export class FinalLevelScene extends Phaser.Scene {
       return;
     }
 
-    if (trap.canTriggerDamage(this.time.now)) {
+    if (
+      trap.canTriggerDamage(this.time.now) &&
+      Phaser.Geom.Intersects.RectangleToRectangle(this.#player.getBounds(), trap.hitbox.getBounds())
+    ) {
       trap.markDamaged(this.time.now);
       this.#damagePlayer(gameplayConfig.traps.spike.damage, this.time.now, {
         knockbackX: 95,

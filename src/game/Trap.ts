@@ -17,6 +17,9 @@ const DEFAULT_TRIGGER_WIDTH = 220;
 const DEFAULT_TRIGGER_HEIGHT = 190;
 const IDLE_SPIKE_TIP_CROP_Y = 90;
 const IDLE_SPIKE_TIP_CROP_HEIGHT = 12;
+const IDLE_SPIKE_TIP_EMBED_PX = 3;
+const SPIKE_HITBOX_WIDTH_RATIO = 0.78;
+const SPIKE_HITBOX_HEIGHT_RATIO = 0.86;
 
 export class Trap {
   readonly sprite: Phaser.Physics.Arcade.Sprite;
@@ -57,9 +60,9 @@ export class Trap {
 
     this.hitbox = scene.add.zone(config.x, config.anchorY, 1, 1);
     scene.physics.add.existing(this.hitbox, true);
+    this.#applyIdleVisual();
     this.#alignToAnchor();
     this.#alignHitbox();
-    this.#applyIdleVisual();
   }
 
   get type(): TrapType {
@@ -175,6 +178,15 @@ export class Trap {
     const padding = definition.alignPadding[this.#currentZeroBasedFrame()] ?? 0;
 
     if (definition.placement === 'ground') {
+      if (this.#isHiddenGroundTrap()) {
+        this.sprite.y =
+          this.config.anchorY +
+          (definition.frameHeight - IDLE_SPIKE_TIP_CROP_Y - IDLE_SPIKE_TIP_CROP_HEIGHT) *
+            definition.scale +
+          IDLE_SPIKE_TIP_EMBED_PX;
+        return;
+      }
+
       this.sprite.y = this.config.anchorY + padding * definition.scale;
       return;
     }
@@ -202,18 +214,21 @@ export class Trap {
     const definition = trapDefinitions[this.config.type];
     const hitbox = definition.hitboxes[this.#currentZeroBasedFrame()] ?? definition.hitboxes[0];
     const scale = definition.scale;
-    const width = hitbox.width * scale;
-    const height = hitbox.height * scale;
+    const rawWidth = hitbox.width * scale;
+    const rawHeight = hitbox.height * scale;
+    const width =
+      this.config.type === 'spike' ? rawWidth * SPIKE_HITBOX_WIDTH_RATIO : rawWidth;
+    const height =
+      this.config.type === 'spike' ? rawHeight * SPIKE_HITBOX_HEIGHT_RATIO : rawHeight;
     const frameLeft = this.sprite.x - (definition.frameWidth * scale) / 2;
     const frameTop =
       definition.placement === 'ground'
         ? this.sprite.y - definition.frameHeight * scale
         : this.sprite.y;
+    const centerX = frameLeft + (hitbox.x + hitbox.width / 2) * scale;
+    const centerY = frameTop + (hitbox.y + hitbox.height / 2) * scale;
 
-    this.hitbox.setPosition(
-      frameLeft + (hitbox.x + hitbox.width / 2) * scale,
-      frameTop + (hitbox.y + hitbox.height / 2) * scale
-    );
+    this.hitbox.setPosition(centerX, centerY);
     this.hitbox.setSize(width, height);
 
     const body = this.hitbox.body as Phaser.Physics.Arcade.StaticBody;
