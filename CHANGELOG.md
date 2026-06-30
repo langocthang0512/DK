@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.3-release] - 2026-07-01
+
+### Release
+
+- Released the latest approved local build after v1.3.3 local QA and combat-launch bugfix validation.
+
+## [1.3.3-local-test] - 2026-07-01
+
+### Fixed
+
+- Fixed the remaining held-movement attack launch path by removing Arcade physics world time scaling from successful attack hit handling.
+- Raised shared enemy visual anchoring slightly so Snake, Hyena, Scorpio, and Vulture feet align better with the approved player stance.
+
+## [1.3.2-local-test] - 2026-07-01
+
+### Fixed
+
+- Fixed the held-movement attack launch path by making player attack state time-bounded instead of dependent on an interruptible animation-complete callback.
+
+## [1.3.1-local-test] - 2026-07-01
+
+### Fixed
+
+- Fixed intermittent player launch during enemy/boss contact and enemy attack timing by removing enemy/boss combat movement impulse and adding a combat-only physics stability guard.
+
+## [1.3.0-local-QA] - 2026-07-01
+
+### Fixed
+
+- Closed short-lived menu WebAudio contexts after UI tones to avoid browser audio resource buildup.
+
+### QA
+
+- Added final local QA documentation and revalidated full game flow locally.
+
+## [1.2.5-local-test] - 2026-07-01
+
+### Changed
+
+- Added a visible Map 1 `J to Attack` tutorial prompt with matching key illustration style.
+- Connected existing enemy attack animations to local player damage windows.
+- Reduced enemy and boss combat hit response to very small controlled pushback.
+- Added more traversal height variation to Map 1, Map 2, and Map 3 while preserving enemy counts.
+
+## [1.2.4-local-test] - 2026-07-01
+
+### Changed
+
+- Updated local enemy attack damage values: Snake 5, Hyena 10, Scorpio 10, Vulture 10.
+- Reduced enemy and boss hit knockback.
+- Moved all final-map enemies to ground-only placements while preserving enemy counts.
+- Increased traversal platform density in Map 1, Map 2, and Map 3.
+- Replaced Map 1 tutorial prompts with readable control instructions and key illustrations.
+
 ## [1.3-ui] - 2026-06-30
 
 ### Added

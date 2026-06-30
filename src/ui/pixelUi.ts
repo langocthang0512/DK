@@ -186,6 +186,10 @@ export function playUiToneSequence(frequencies: readonly number[], volume = 0.03
       oscillator.start(noteStart);
       oscillator.stop(noteEnd);
     });
+    const closeDelayMs = (frequencies.length + 1) * step * 1000;
+    window.setTimeout(() => {
+      void context.close().catch(() => undefined);
+    }, closeDelayMs);
   } catch {
     // Browsers may block WebAudio before user interaction.
   }

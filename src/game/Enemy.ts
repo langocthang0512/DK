@@ -9,6 +9,8 @@ import {
 } from '@assets/enemyAssets';
 import { gameplayConfig } from '@config/gameplayConfig';
 
+const ENEMY_VISUAL_GROUND_OFFSET_Y = -5;
+
 export type EnemySpawnConfig = Readonly<{
   type: EnemyType;
   x: number;
@@ -27,6 +29,7 @@ export class Enemy {
   #lastAttackAt = -Infinity;
   #lockedUntil = 0;
   #isDead = false;
+  #hasDamagedThisAttack = false;
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -36,7 +39,12 @@ export class Enemy {
     this.definition = enemyDefinitions[config.type];
     this.#health = this.definition.health;
     this.sprite = scene.physics.add
-      .sprite(config.x, config.y, getEnemyAnimationKey(config.type, 'idle'), 0)
+      .sprite(
+        config.x,
+        config.y + ENEMY_VISUAL_GROUND_OFFSET_Y,
+        getEnemyAnimationKey(config.type, 'idle'),
+        0
+      )
       .setOrigin(0.5, 1)
       .setScale(this.definition.scale)
       .setDepth(20)
@@ -74,6 +82,19 @@ export class Enemy {
 
   get type(): EnemyType {
     return this.config.type;
+  }
+
+  tryApplyAttackHit(playerBounds: Phaser.Geom.Rectangle): boolean {
+    if (!this.isAttackActive || this.#hasDamagedThisAttack) {
+      return false;
+    }
+
+    if (!Phaser.Geom.Intersects.RectangleToRectangle(this.#attackBounds(), playerBounds)) {
+      return false;
+    }
+
+    this.#hasDamagedThisAttack = true;
+    return true;
   }
 
   update(time: number): void {
@@ -161,7 +182,18 @@ export class Enemy {
 
     this.#lastAttackAt = time;
     this.#lockedUntil = time + 340;
+    this.#hasDamagedThisAttack = false;
     this.#play('attack', true);
+  }
+
+  #attackBounds(): Phaser.Geom.Rectangle {
+    const body = this.sprite.body as Phaser.Physics.Arcade.Body;
+    const height = Math.max(body.height * this.definition.scale, 44);
+    const y = this.sprite.y - height;
+    const width = this.definition.attackRange;
+    const x = this.#facing < 0 ? this.sprite.x - width : this.sprite.x;
+
+    return new Phaser.Geom.Rectangle(x, y, width, height);
   }
 
   #die(): void {

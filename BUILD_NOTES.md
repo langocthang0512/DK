@@ -1,14 +1,14 @@
 # Build Notes
 
-Version: `v1.3-ui`
+Version: `v1.3.3-release`
 
-Date: 2026-06-30
+Date: 2026-07-01
 
 ## Scope
 
-Playable v1.3 UI build for DK.
+Playable v1.3.3 release build for DK.
 
-Content is frozen for this build. No map, enemy, trap, boss, player, combat, balance, or pacing changes were added during this UI patch.
+This release is built from the latest approved local project state after the v1.3.3 local QA and bugfix pass.
 
 ## Included Content
 
@@ -53,10 +53,38 @@ Final validation status:
 - Production preview: loaded at `http://127.0.0.1:4173/` with HTTP 200
 - Required approved asset files: present
 - Production output: `dist/index.html` present
+- v1.3.3 held-movement attack launch patch: lint, typecheck, and production build passed locally
+- v1.3.3 release build: lint, typecheck, and production build passed locally
+- v1.3.2 held-movement attack launch patch: lint, typecheck, and production build passed locally
+- v1.3.1 combat launch patch: lint, typecheck, and production build passed locally
 
 ## Release Notes
 
-- Strict UI implementation patch only.
+- Strict final local QA pass only.
+- Critical local bugfix pass for intermittent enemy/boss combat launch.
+- Critical local bugfix pass for held-movement attack launch reproduction.
+- Critical local bugfix pass for the remaining held-movement attack launch reproduction.
+- Successful attacks no longer change Arcade physics world `timeScale`; the hit-stop hook now only refreshes the combat stability guard so held movement cannot desync physics integration.
+- Enemy visual ground anchoring was raised slightly to align enemy feet with the approved player stance.
+- Root cause, fix, and regression notes are documented in `docs/combat-launch-v1.3.3-local-test.md`.
+- Player attack state now expires from a fixed attack window instead of relying on an animation-complete callback that can be interrupted by movement, hit, fall, or landing transitions.
+- Root cause, fix, and regression notes are documented in `docs/combat-launch-v1.3.2-local-test.md`.
+- Enemy and boss combat damage now uses hit animation feedback without movement impulse.
+- Added a short combat-only player physics guard to clamp abnormal one-frame displacement spikes during enemy/boss contact and attack timing.
+- Root cause, fix, and regression notes are documented in `docs/combat-launch-v1.3.1-local-test.md`.
+- Completed systematic code, asset, scene flow, UI, combat, enemy, trap, boss, and build audit.
+- Fixed a UI audio resource lifecycle issue by closing short-lived WebAudio contexts after menu tones.
+- Revalidated local build output and complete scene flow.
+- Strict local test patch only.
+- Added the visible `J to Attack` tutorial prompt in Map 1 with matching pixel key illustration style.
+- Connected existing enemy attack animations to player damage windows for Snake, Hyena, Scorpio, and Vulture.
+- Fixed enemy and boss combat hit response to avoid abnormal launch, flying, sliding, teleporting, and map skipping.
+- Added more Map 1, Map 2, and Map 3 traversal height variation while preserving enemy counts and progression.
+- Enemy attack damage was updated locally: Snake 5, Hyena 10, Scorpio 10, Vulture 10.
+- Enemy and boss hit knockback were reduced to very small pushback values.
+- All final-map enemies were moved to ground-only placements.
+- Map 1, Map 2, and Map 3 received additional traversal platforms to reduce empty space.
+- Map 1 tutorial now shows Arrow Keys to Move, Up Arrow to Jump, and J to Attack with simple key illustrations.
 - Added Main Menu with START, existing environment background, reference-style title, and clickable box button.
 - Added Pause Menu with dark overlay, RESUME, MAIN MENU, pointer support, and keyboard support.
 - Added Ending screen after final victory with YOU ARE THE LEGENDS and MAIN MENU.

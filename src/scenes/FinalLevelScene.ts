@@ -104,14 +104,27 @@ const HIT_LOCK_MS = 300;
 const PLAYER_HURT_LOCK_MS = 1000;
 const PLAYER_ATTACK_DAMAGE = gameplayConfig.player.attackDamage;
 const PLAYER_ATTACK_COOLDOWN_MS = gameplayConfig.player.attackCooldownMs;
+const PLAYER_ATTACK_ACTIVE_MS = 260;
 const PLAYER_ATTACK_RANGE = 92;
 const NORMAL_STAGGER = 25;
 const CRITICAL_STAGGER = 40;
-const HIT_STOP_MS = 80;
 const HEALTH_BAR_GAP = 5;
-const PLATFORM_ENEMY_FOOT_OFFSET = 14;
-const PLATFORM_PATROL_EDGE_INSET = 28;
 const PLAYER_BODY_OFFSET_Y = 37;
+const ENEMY_HIT_KNOCKBACK_X = 0;
+const ENEMY_HIT_KNOCKBACK_Y = 0;
+const BOSS_HIT_KNOCKBACK_X = 0;
+const BOSS_HIT_KNOCKBACK_Y = 0;
+const COMBAT_STABILITY_MS = 450;
+const COMBAT_MAX_FRAME_DELTA_X = 48;
+const COMBAT_MAX_FRAME_DELTA_Y = 80;
+const COMBAT_MAX_VELOCITY_X = MOVE_SPEED;
+const COMBAT_MAX_VELOCITY_Y = 900;
+const enemyAttackDamage = {
+  snake: 5,
+  hyena: 10,
+  scorpio: 10,
+  vulture: 10
+} as const satisfies Record<EnemyType, number>;
 
 const terrainDefinitions = {
   ground: {
@@ -172,34 +185,41 @@ const map1Config: LevelConfig = {
     platform('smallPlatform', 2_000, 425),
     platform('vinePlatform', 2_480, 365),
     platform('smallPlatform', 3_050, 310),
+    platform('smallPlatform', 3_650, 405),
     platform('smallPlatform', 4_620, 420),
     platform('vinePlatform', 5_050, 355),
+    platform('smallPlatform', 5_720, 300),
     platform('smallPlatform', 6_500, 405),
     platform('smallPlatform', 6_920, 340),
+    platform('smallPlatform', 7_460, 370),
     platform('vinePlatform', 8_150, 390),
     platform('smallPlatform', 9_020, 330),
+    platform('smallPlatform', 9_850, 365),
     platform('vinePlatform', 10_750, 400),
     platform('smallPlatform', 11_300, 340),
+    platform('smallPlatform', 12_050, 410),
     platform('vinePlatform', 13_260, 390),
     platform('smallPlatform', 14_150, 330),
+    platform('smallPlatform', 15_250, 365),
     platform('vinePlatform', 16_500, 395),
-    platform('smallPlatform', 17_300, 335)
+    platform('smallPlatform', 17_300, 335),
+    platform('smallPlatform', 18_050, 405)
   ],
   enemies: [
     enemy('snake', 2_720, 2_420, 3_050),
-    enemyAt('snake', 3_130, smallSurface(310), 3_060, 3_250),
+    enemy('snake', 3_130, 2_980, 3_300),
     enemy('hyena', 4_050, 3_720, 4_380),
     enemy('snake', 5_700, 5_400, 6_020),
     enemy('scorpio', 7_020, 6_820, 7_250),
     enemy('snake', 7_750, 7_420, 8_060),
-    enemyAt('snake', 8_260, vineSurface(390), 8_170, 8_360),
+    enemy('snake', 8_260, 8_050, 8_470),
     enemy('snake', 9_700, 9_360, 10_040),
     enemy('snake', 11_420, 11_210, 11_640),
     enemy('scorpio', 12_320, 11_980, 12_650),
-    enemyAt('snake', 13_380, vineSurface(390), 13_270, 13_500),
+    enemy('snake', 13_380, 13_140, 13_620),
     enemy('snake', 14_950, 14_620, 15_290),
     enemy('hyena', 16_050, 15_720, 16_380),
-    enemyAt('snake', 16_620, vineSurface(395), 16_520, 16_760),
+    enemy('snake', 16_620, 16_430, 16_850),
     enemy('scorpio', 17_420, 17_240, 17_650),
     enemy('snake', 18_650, 18_320, 18_980)
   ],
@@ -217,9 +237,9 @@ const map1Config: LevelConfig = {
     spikeOnPlatform('smallPlatform', 17_300, 335, 180)
   ],
   tutorial: [
-    { text: 'MOVE', x: 620, y: 486 },
-    { text: 'JUMP', x: 1_850, y: 486 },
-    { text: 'ATTACK', x: 3_450, y: 486 }
+    { text: 'Arrow Keys to Move', x: 650, y: 205 },
+    { text: 'Up Arrow to Jump', x: 650, y: 295 },
+    { text: 'J to Attack', x: 650, y: 385 }
   ]
 };
 
@@ -233,42 +253,49 @@ const map2Config: LevelConfig = {
     ...groundStrip(22_500),
     platform('smallPlatform', 1_850, 420),
     platform('vinePlatform', 2_350, 360),
+    platform('smallPlatform', 2_920, 315),
     platform('smallPlatform', 3_450, 405),
     platform('vinePlatform', 3_980, 345),
     platform('smallPlatform', 5_200, 415),
     platform('smallPlatform', 5_720, 350),
+    platform('smallPlatform', 6_340, 300),
     platform('vinePlatform', 7_100, 390),
     platform('smallPlatform', 7_650, 330),
+    platform('smallPlatform', 8_360, 370),
     platform('vinePlatform', 9_150, 405),
     platform('smallPlatform', 9_720, 345),
     platform('vinePlatform', 11_250, 385),
     platform('smallPlatform', 11_820, 330),
+    platform('smallPlatform', 12_520, 370),
     platform('vinePlatform', 13_650, 395),
     platform('smallPlatform', 14_250, 335),
+    platform('smallPlatform', 15_150, 390),
     platform('vinePlatform', 16_250, 395),
     platform('smallPlatform', 16_850, 335),
+    platform('smallPlatform', 17_600, 380),
     platform('vinePlatform', 18_750, 390),
-    platform('smallPlatform', 19_350, 330)
+    platform('smallPlatform', 19_350, 330),
+    platform('smallPlatform', 20_100, 385)
   ],
   enemies: [
     enemy('hyena', 2_760, 2_420, 3_100),
     enemy('snake', 3_520, 3_320, 3_740),
     enemy('scorpio', 4_760, 4_420, 5_100),
-    enemyAt('snake', 5_820, smallSurface(350), 5_720, 5_930),
+    enemy('snake', 5_820, 5_620, 6_040),
     enemy('snake', 6_480, 6_160, 6_820),
     enemy('scorpio', 7_220, 7_020, 7_450),
     enemy('hyena', 8_480, 8_140, 8_820),
     enemy('scorpio', 9_800, 9_600, 10_020),
     enemy('hyena', 10_650, 10_320, 10_980),
-    enemyAt('snake', 11_900, smallSurface(330), 11_820, 12_000),
+    enemy('snake', 11_900, 11_700, 12_120),
     enemy('scorpio', 12_620, 12_280, 12_960),
     enemy('hyena', 13_760, 13_560, 13_980),
     enemy('scorpio', 14_900, 14_560, 15_240),
     enemy('hyena', 15_720, 15_390, 16_040),
     enemy('scorpio', 16_360, 16_160, 16_580),
-    enemyAt('snake', 16_930, smallSurface(335), 16_850, 17_080),
+    enemy('snake', 16_930, 16_730, 17_150),
     enemy('snake', 17_980, 17_640, 18_320),
-    enemyAt('scorpio', 18_860, vineSurface(390), 18_760, 19_000),
+    enemy('scorpio', 18_860, 18_660, 19_080),
     enemy('hyena', 19_940, 19_600, 20_280),
     enemy('scorpio', 20_650, 20_320, 20_980)
   ],
@@ -308,23 +335,31 @@ const map3Config: LevelConfig = {
     platform('smallPlatform', 1_700, 420),
     platform('vinePlatform', 2_200, 360),
     platform('smallPlatform', 2_760, 305),
+    platform('smallPlatform', 3_420, 365),
     platform('smallPlatform', 4_150, 410),
     platform('vinePlatform', 4_650, 350),
     platform('smallPlatform', 5_200, 292),
+    platform('smallPlatform', 5_900, 380),
     platform('smallPlatform', 6_600, 425),
     platform('smallPlatform', 7_080, 360),
     platform('vinePlatform', 7_560, 305),
+    platform('smallPlatform', 8_250, 370),
     platform('vinePlatform', 9_150, 395),
     platform('smallPlatform', 9_700, 335),
     platform('smallPlatform', 10_200, 285),
+    platform('smallPlatform', 10_950, 370),
     platform('vinePlatform', 11_900, 385),
     platform('smallPlatform', 12_480, 330),
+    platform('smallPlatform', 13_260, 385),
     platform('vinePlatform', 14_350, 395),
     platform('smallPlatform', 14_930, 335),
+    platform('smallPlatform', 15_700, 385),
     platform('vinePlatform', 16_700, 390),
     platform('smallPlatform', 17_280, 330),
+    platform('smallPlatform', 18_050, 385),
     platform('vinePlatform', 19_050, 385),
     platform('smallPlatform', 19_650, 325),
+    platform('smallPlatform', 20_450, 380),
     platform('vinePlatform', 21_250, 380),
     platform('smallPlatform', 21_860, 320)
   ],
@@ -338,11 +373,11 @@ const map3Config: LevelConfig = {
     enemy('scorpio', 10_900, 10_560, 11_240),
     enemy('hyena', 12_560, 12_360, 12_790),
     enemy('vulture', 13_450, 13_100, 13_780),
-    enemyAt('scorpio', 14_450, vineSurface(395), 14_360, 14_560),
+    enemy('scorpio', 14_450, 14_250, 14_670),
     enemy('hyena', 15_650, 15_320, 15_980),
     enemy('vulture', 16_820, 16_620, 17_050),
     enemy('snake', 17_900, 17_560, 18_230),
-    enemyAt('scorpio', 19_150, vineSurface(385), 19_060, 19_270),
+    enemy('scorpio', 19_150, 18_950, 19_370),
     enemy('vulture', 20_150, 19_820, 20_480),
     enemy('vulture', 21_390, 21_190, 21_620),
     enemy('scorpio', 22_300, 21_960, 22_640)
@@ -420,12 +455,17 @@ export class FinalLevelScene extends Phaser.Scene {
   #hitUntil = 0;
   #playerHurtUntil = 0;
   #attackReadyAt = 0;
+  #attackActiveUntil = 0;
   #isAttacking = false;
   #isDead = false;
   #isCompleting = false;
   #comboHits = 0;
   #attackHitTargets = new Set<Enemy | Boss>();
   #currentAnimation: PlayerAnimationKey | null = null;
+  #combatStabilityUntil = 0;
+  #lastPlayerX = 0;
+  #lastPlayerY = 0;
+  #hasPlayerPositionSample = false;
 
   constructor(private readonly config: LevelConfig) {
     super(config.key);
@@ -492,6 +532,7 @@ export class FinalLevelScene extends Phaser.Scene {
     }
 
     const horizontal = this.#getHorizontalInput();
+    this.#refreshAttackState(time);
     const lockedByHit = time < this.#hitUntil;
 
     if (lockedByHit) {
@@ -505,6 +546,7 @@ export class FinalLevelScene extends Phaser.Scene {
 
     for (const enemy of this.#enemies) {
       enemy.update(time);
+      this.#handleEnemyAttack(enemy);
     }
     for (const trap of this.#traps) {
       trap.update(time, this.#player);
@@ -512,6 +554,7 @@ export class FinalLevelScene extends Phaser.Scene {
     this.#boss?.update(time);
     this.#updateHealthBars();
     this.#updateHud();
+    this.#guardPlayerCombatStability(time);
 
     this.#updateAnimation(time, horizontal, grounded);
     this.#updateCameraLookAhead();
@@ -525,12 +568,17 @@ export class FinalLevelScene extends Phaser.Scene {
     this.#hitUntil = 0;
     this.#playerHurtUntil = 0;
     this.#attackReadyAt = 0;
+    this.#attackActiveUntil = 0;
     this.#isAttacking = false;
     this.#isDead = false;
     this.#isCompleting = false;
     this.#comboHits = 0;
     this.#attackHitTargets.clear();
     this.#currentAnimation = null;
+    this.#combatStabilityUntil = 0;
+    this.#lastPlayerX = 0;
+    this.#lastPlayerY = 0;
+    this.#hasPlayerPositionSample = false;
     this.#enemies = [];
     this.#traps = [];
     this.#boss = null;
@@ -687,16 +735,61 @@ export class FinalLevelScene extends Phaser.Scene {
       const text = this.add.text(prompt.x, prompt.y, prompt.text, {
         color: '#dcebd2',
         fontFamily: 'monospace',
-        fontSize: '22px'
+        fontSize: '18px',
+        stroke: '#111711',
+        strokeThickness: 4
       });
       text.setDepth(1).setAlpha(0.82);
+      this.#createTutorialKeys(prompt);
       this.tweens.add({
         targets: text,
         alpha: 0,
-        delay: 4_500,
+        delay: 8_000,
         duration: 900
       });
     }
+  }
+
+  #createTutorialKeys(prompt: TutorialPrompt): void {
+    const labels = prompt.text.includes('Move')
+      ? ['<', '>']
+      : prompt.text.includes('Jump')
+        ? ['^']
+        : ['J'];
+    const keyWidth = 30;
+    const gap = 6;
+    const totalWidth = labels.length * keyWidth + (labels.length - 1) * gap;
+    const startX = prompt.x - totalWidth * 0.5 + keyWidth * 0.5;
+    const y = prompt.y + 38;
+
+    labels.forEach((label, index) => {
+      const x = startX + index * (keyWidth + gap);
+      const bg = this.add.graphics().setDepth(1).setAlpha(0.82);
+      bg.fillStyle(0x07120f, 1);
+      bg.fillRoundedRect(x - keyWidth * 0.5 - 2, y - 14, keyWidth + 4, 28, 3);
+      bg.fillStyle(0x66c783, 1);
+      bg.fillRoundedRect(x - keyWidth * 0.5, y - 12, keyWidth, 23, 3);
+      bg.fillStyle(0x95ed9f, 0.9);
+      bg.fillRect(x - keyWidth * 0.5 + 4, y - 9, keyWidth - 8, 2);
+
+      const keyText = this.add
+        .text(x, y - 1, label, {
+          color: '#07120f',
+          fontFamily: 'monospace',
+          fontSize: '16px',
+          fontStyle: 'bold'
+        })
+        .setOrigin(0.5, 0.5)
+        .setDepth(1)
+        .setAlpha(0.82);
+
+      this.tweens.add({
+        targets: [bg, keyText],
+        alpha: 0,
+        delay: 8_000,
+        duration: 900
+      });
+    });
   }
 
   #createFinish(): void {
@@ -724,6 +817,7 @@ export class FinalLevelScene extends Phaser.Scene {
     this.#playerBody.setOffset(45, PLAYER_BODY_OFFSET_Y);
     this.#playerBody.setMaxVelocity(MOVE_SPEED, 900);
     this.#playerBody.setDragX(MOVE_ACCELERATION);
+    this.#samplePlayerPosition();
 
     this.#playAnimation('idle');
   }
@@ -949,11 +1043,9 @@ export class FinalLevelScene extends Phaser.Scene {
     }
 
     this.#attackReadyAt = this.time.now + PLAYER_ATTACK_COOLDOWN_MS;
+    this.#attackActiveUntil = this.time.now + PLAYER_ATTACK_ACTIVE_MS;
     this.#attackHitTargets.clear();
     this.#isAttacking = true;
-    this.#player.once(Phaser.Animations.Events.ANIMATION_COMPLETE_KEY + 'player.attack', () => {
-      this.#isAttacking = false;
-    });
     this.#damageInRange();
     this.#playAnimation('attack', true);
   }
@@ -976,6 +1068,7 @@ export class FinalLevelScene extends Phaser.Scene {
         const hit = this.#rollPlayerHit();
         enemy.hurt(hit.damage, hit.stagger);
         this.#attackHitTargets.add(enemy);
+        this.#armCombatStability(this.time.now);
         this.#applyHitStop();
       }
     }
@@ -994,6 +1087,7 @@ export class FinalLevelScene extends Phaser.Scene {
       });
       this.#attackHitTargets.add(boss);
       if (appliedDamage > 0) {
+        this.#armCombatStability(this.time.now);
         this.#applyHitStop();
       }
     }
@@ -1024,10 +1118,7 @@ export class FinalLevelScene extends Phaser.Scene {
   }
 
   #applyHitStop(): void {
-    this.physics.world.timeScale = 0.01;
-    this.time.delayedCall(HIT_STOP_MS, () => {
-      this.physics.world.timeScale = 1;
-    });
+    this.#armCombatStability(this.time.now);
   }
 
   #handleEnemyOverlap(enemy: Enemy): void {
@@ -1035,18 +1126,29 @@ export class FinalLevelScene extends Phaser.Scene {
       return;
     }
 
-    if (this.#isAttacking) {
+    if (this.#isPlayerAttackActive()) {
       this.#damageInRange();
       return;
     }
 
-    if (enemy.isAttackActive && this.time.now >= this.#playerHurtUntil) {
-      this.#damagePlayer(gameplayConfig.enemy.damage, this.time.now, {
-        sourceX: enemy.sprite.x,
-        knockbackX: 90,
-        knockbackY: -120
-      });
+    this.#handleEnemyAttack(enemy);
+  }
+
+  #handleEnemyAttack(enemy: Enemy): void {
+    if (
+      enemy.isDead ||
+      this.#isDead ||
+      this.time.now < this.#playerHurtUntil ||
+      !enemy.tryApplyAttackHit(this.#player.getBounds())
+    ) {
+      return;
     }
+
+    this.#damagePlayer(enemyAttackDamage[enemy.type], this.time.now, {
+      sourceX: enemy.sprite.x,
+      knockbackX: ENEMY_HIT_KNOCKBACK_X,
+      knockbackY: ENEMY_HIT_KNOCKBACK_Y
+    });
   }
 
   #handleBossOverlap(): void {
@@ -1055,7 +1157,7 @@ export class FinalLevelScene extends Phaser.Scene {
       return;
     }
 
-    if (this.#isAttacking) {
+    if (this.#isPlayerAttackActive()) {
       this.#damageInRange();
       return;
     }
@@ -1065,8 +1167,8 @@ export class FinalLevelScene extends Phaser.Scene {
       this.#playerBody.setVelocity(0, 0);
       this.#damagePlayer(boss.activeAttackDamage, this.time.now, {
         sourceX: boss.sprite.x,
-        knockbackX: gameplayConfig.boss.playerHitKnockbackX,
-        knockbackY: gameplayConfig.boss.playerHitKnockbackY
+        knockbackX: BOSS_HIT_KNOCKBACK_X,
+        knockbackY: BOSS_HIT_KNOCKBACK_Y
       });
     }
   }
@@ -1136,6 +1238,8 @@ export class FinalLevelScene extends Phaser.Scene {
     this.#playerHp = Math.max(0, this.#playerHp - damage);
     this.#playerHurtUntil = time + PLAYER_HURT_LOCK_MS;
     this.#comboHits = 0;
+    this.#isAttacking = false;
+    this.#attackActiveUntil = 0;
 
     if (this.#playerHp <= 0) {
       this.#die();
@@ -1150,12 +1254,59 @@ export class FinalLevelScene extends Phaser.Scene {
     knockback: Readonly<{ sourceX?: number; knockbackX: number; knockbackY: number }>
   ): void {
     this.#hitUntil = time + HIT_LOCK_MS;
+    this.#armCombatStability(time);
     const direction =
       knockback.sourceX === undefined ? -this.#facing : this.#player.x < knockback.sourceX ? -1 : 1;
-    this.#playerBody.setAccelerationX(0);
-    this.#playerBody.setVelocityX(direction * knockback.knockbackX);
-    this.#playerBody.setVelocityY(knockback.knockbackY);
+    this.#playerBody.setAcceleration(0, 0);
+    this.#playerBody.setVelocity(
+      direction * Phaser.Math.Clamp(knockback.knockbackX, 0, COMBAT_MAX_VELOCITY_X),
+      Phaser.Math.Clamp(knockback.knockbackY, -COMBAT_MAX_VELOCITY_Y, COMBAT_MAX_VELOCITY_Y)
+    );
     this.#playAnimation('hit', true);
+  }
+
+  #armCombatStability(time: number): void {
+    this.#combatStabilityUntil = Math.max(this.#combatStabilityUntil, time + COMBAT_STABILITY_MS);
+  }
+
+  #guardPlayerCombatStability(time: number): void {
+    if (!this.#hasPlayerPositionSample) {
+      this.#samplePlayerPosition();
+      return;
+    }
+
+    if (time > this.#combatStabilityUntil) {
+      this.#samplePlayerPosition();
+      return;
+    }
+
+    const deltaX = this.#player.x - this.#lastPlayerX;
+    const deltaY = this.#player.y - this.#lastPlayerY;
+    const clampedX =
+      Math.abs(deltaX) > COMBAT_MAX_FRAME_DELTA_X
+        ? this.#lastPlayerX + Math.sign(deltaX) * COMBAT_MAX_FRAME_DELTA_X
+        : this.#player.x;
+    const clampedY =
+      Math.abs(deltaY) > COMBAT_MAX_FRAME_DELTA_Y
+        ? this.#lastPlayerY + Math.sign(deltaY) * COMBAT_MAX_FRAME_DELTA_Y
+        : this.#player.y;
+
+    if (clampedX !== this.#player.x || clampedY !== this.#player.y) {
+      this.#player.setPosition(clampedX, clampedY);
+      this.#playerBody.reset(clampedX, clampedY);
+    }
+
+    this.#playerBody.setVelocity(
+      Phaser.Math.Clamp(this.#playerBody.velocity.x, -COMBAT_MAX_VELOCITY_X, COMBAT_MAX_VELOCITY_X),
+      Phaser.Math.Clamp(this.#playerBody.velocity.y, -COMBAT_MAX_VELOCITY_Y, COMBAT_MAX_VELOCITY_Y)
+    );
+    this.#samplePlayerPosition();
+  }
+
+  #samplePlayerPosition(): void {
+    this.#lastPlayerX = this.#player.x;
+    this.#lastPlayerY = this.#player.y;
+    this.#hasPlayerPositionSample = true;
   }
 
   #die(): void {
@@ -1181,7 +1332,11 @@ export class FinalLevelScene extends Phaser.Scene {
   }
 
   #updateAnimation(time: number, horizontal: -1 | 0 | 1, grounded: boolean): void {
-    if (this.#isAttacking || time < this.#hitUntil || this.#currentAnimation === 'turnAround') {
+    if (
+      this.#isPlayerAttackActive(time) ||
+      time < this.#hitUntil ||
+      this.#currentAnimation === 'turnAround'
+    ) {
       return;
     }
 
@@ -1260,6 +1415,17 @@ export class FinalLevelScene extends Phaser.Scene {
       );
     }
   }
+
+  #isPlayerAttackActive(time = this.time.now): boolean {
+    this.#refreshAttackState(time);
+    return this.#isAttacking;
+  }
+
+  #refreshAttackState(time: number): void {
+    if (this.#isAttacking && time >= this.#attackActiveUntil) {
+      this.#isAttacking = false;
+    }
+  }
 }
 
 export class Map1Scene extends FinalLevelScene {
@@ -1314,22 +1480,6 @@ function enemy(
   };
 }
 
-function enemyAt(
-  type: EnemyType,
-  x: number,
-  y: number,
-  patrolLeft: number,
-  patrolRight: number
-): EnemySpawnConfig {
-  return {
-    type,
-    x,
-    y: y + PLATFORM_ENEMY_FOOT_OFFSET,
-    patrolLeft: patrolLeft + PLATFORM_PATROL_EDGE_INSET,
-    patrolRight: patrolRight - PLATFORM_PATROL_EDGE_INSET
-  };
-}
-
 function spike(x: number, delayMs = 0): TrapSpawnConfig {
   return spikeAt(x, GROUND_SURFACE_Y, delayMs);
 }
@@ -1365,14 +1515,6 @@ function axe(x: number, anchorY: number): TrapSpawnConfig {
     cooldownMs: gameplayConfig.traps.axe.cooldownMs,
     delayMs: gameplayConfig.traps.axe.activationDelayMs
   };
-}
-
-function smallSurface(y: number): number {
-  return platformSurface('smallPlatform', y);
-}
-
-function vineSurface(y: number): number {
-  return platformSurface('vinePlatform', y);
 }
 
 function platformSurface(kind: TerrainKind, y: number): number {

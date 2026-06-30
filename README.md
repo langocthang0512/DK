@@ -2,9 +2,9 @@
 
 DK is a web-based 2D platformer built with Phaser, TypeScript, Vite, npm, Vercel, and GitHub Actions.
 
-Current version: `v1.3-ui`
+Current version: `v1.3.3-release`
 
-This build contains the frozen v1.3 UI content: redesigned dense Map 1, Map 2, Map 3, and dedicated Map 4 boss arena using only approved assets, animations, controllers, collisions, and gameplay systems.
+This release build contains the v1.3.3 complete game flow: Main Menu -> Map 1 -> Map 2 -> Map 3 -> Map 4 -> Ending using only approved assets, animations, controllers, collisions, and gameplay systems.
 
 ## Requirements
 
@@ -108,6 +108,27 @@ UI patch v1.3:
 - Added an in-game Pause Menu with RESUME and MAIN MENU.
 - Added an Ending screen after final victory with MAIN MENU.
 - Added keyboard and pointer support for clickable box UI buttons.
+
+Local test patch v1.2.4:
+
+- Updated enemy attack damage locally: Snake 5, Hyena 10, Scorpio 10, Vulture 10.
+- Reduced enemy and boss hit knockback.
+- Moved all final-map enemies to ground-only placements.
+- Increased Map 1, Map 2, and Map 3 traversal platform density.
+- Replaced Map 1 tutorial prompts with readable movement, jump, and attack instructions plus key illustrations.
+
+Local test patch v1.2.5:
+
+- Kept the full local-only game flow and added the missing visible `J to Attack` tutorial prompt.
+- Connected enemy attack animation windows to player damage for Snake, Hyena, Scorpio, and Vulture.
+- Reduced combat hit response to very small controlled pushback with no vertical launch.
+- Added more Map 1, Map 2, and Map 3 traversal variation while preserving enemy counts.
+
+Local QA patch v1.3.0:
+
+- Completed a local-only QA audit and bugfix pass.
+- Closed menu UI audio contexts after short tones to avoid browser audio resource buildup.
+- Revalidated full local flow, scene transitions, enemy attacks, tutorial, pause, build output, and local preview.
 
 ## Deployment
 
