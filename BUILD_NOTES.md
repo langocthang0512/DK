@@ -1,12 +1,12 @@
 # Build Notes
 
-Version: `v1.2.2-bugfix`
+Version: `v1.2.3-change-patch`
 
 Date: 2026-06-30
 
 ## Scope
 
-Playable v1.2.2 bugfix build for DK.
+Playable v1.2.3 change-patch build for DK.
 
 Content is frozen for this build. No new assets, visual redesigns, animation replacements, gameplay redesigns, balance changes, object count changes, or map flow changes were added during this bugfix patch.
 
@@ -60,6 +60,11 @@ Final validation status:
 - Floating-platform Spike traps remain centered on their platform surface.
 - Spike trap damage remains limited to once per emergence cycle and is constrained to the visible hitbox.
 - Spike trap idle warning tips now emerge from the surface instead of floating above it.
+- Enemies were removed from floating platforms that contain Spike traps without reducing enemy totals.
+- Floating platform enemies are restricted to Snake, Scorpio, and Vulture.
+- Hyena placements are ground-only.
+- Spike trap hitboxes were tightened to the visible spike geometry.
+- Floating platform enemy patrols are clamped to platform-safe bounds.
 - Production boot starts at Map 1.
 - Map flow is Map 1 -> Map 2 -> Map 3 -> Map 4.
 - Map 4 is a dedicated boss-only scene.

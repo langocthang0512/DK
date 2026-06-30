@@ -18,8 +18,8 @@ const DEFAULT_TRIGGER_HEIGHT = 190;
 const IDLE_SPIKE_TIP_CROP_Y = 90;
 const IDLE_SPIKE_TIP_CROP_HEIGHT = 12;
 const IDLE_SPIKE_TIP_EMBED_PX = 3;
-const SPIKE_HITBOX_WIDTH_RATIO = 0.78;
-const SPIKE_HITBOX_HEIGHT_RATIO = 0.86;
+const SPIKE_HITBOX_WIDTH_RATIO = 0.66;
+const SPIKE_HITBOX_HEIGHT_RATIO = 0.72;
 
 export class Trap {
   readonly sprite: Phaser.Physics.Arcade.Sprite;
@@ -216,10 +216,8 @@ export class Trap {
     const scale = definition.scale;
     const rawWidth = hitbox.width * scale;
     const rawHeight = hitbox.height * scale;
-    const width =
-      this.config.type === 'spike' ? rawWidth * SPIKE_HITBOX_WIDTH_RATIO : rawWidth;
-    const height =
-      this.config.type === 'spike' ? rawHeight * SPIKE_HITBOX_HEIGHT_RATIO : rawHeight;
+    const width = this.config.type === 'spike' ? rawWidth * SPIKE_HITBOX_WIDTH_RATIO : rawWidth;
+    const height = this.config.type === 'spike' ? rawHeight * SPIKE_HITBOX_HEIGHT_RATIO : rawHeight;
     const frameLeft = this.sprite.x - (definition.frameWidth * scale) / 2;
     const frameTop =
       definition.placement === 'ground'

@@ -2,9 +2,9 @@
 
 DK is a web-based 2D platformer built with Phaser, TypeScript, Vite, npm, Vercel, and GitHub Actions.
 
-Current version: `v1.2.2-bugfix`
+Current version: `v1.2.3-change-patch`
 
-This build contains the frozen v1.2.2 bugfix content: redesigned dense Map 1, Map 2, Map 3, and dedicated Map 4 boss arena using only approved assets, animations, controllers, collisions, and gameplay systems.
+This build contains the frozen v1.2.3 change-patch content: redesigned dense Map 1, Map 2, Map 3, and dedicated Map 4 boss arena using only approved assets, animations, controllers, collisions, and gameplay systems.
 
 ## Requirements
 
@@ -92,6 +92,14 @@ Bugfix patch v1.2.2:
 - Floating-platform Spike traps remain centered and surface-aligned.
 - Spike trap damage is locked to one hit per emergence cycle and constrained to the visible hitbox.
 - Idle Spike warning tips now emerge from the surface instead of floating above it.
+
+Change patch v1.2.3:
+
+- Removed enemy overlap from floating platforms that contain Spike traps while preserving enemy totals.
+- Restricted floating platform enemy types to Snake, Scorpio, and Vulture.
+- Kept Hyena on ground-only placements.
+- Tightened Spike trap hitboxes to visible spike geometry.
+- Clamped floating platform enemy patrols to platform-safe bounds.
 
 ## Deployment
 

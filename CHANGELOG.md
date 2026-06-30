@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.3-change-patch] - 2026-06-30
+
+### Changed
+
+- Removed enemy overlap from floating platforms that contain Spike traps while preserving enemy totals.
+- Restricted floating platform enemy types to Snake, Scorpio, and Vulture.
+- Kept Hyena placements on ground only.
+- Clamped floating platform enemy patrol behavior to platform-safe bounds.
+
+### Fixed
+
+- Tightened Spike trap hitboxes to visible spike geometry.
+
 ## [1.2.2-bugfix] - 2026-06-30
 
 ### Fixed

@@ -108,6 +108,7 @@ const CRITICAL_STAGGER = 40;
 const HIT_STOP_MS = 80;
 const HEALTH_BAR_GAP = 5;
 const PLATFORM_ENEMY_FOOT_OFFSET = 14;
+const PLATFORM_PATROL_EDGE_INSET = 28;
 const PLAYER_BODY_OFFSET_Y = 37;
 
 const terrainDefinitions = {
@@ -187,17 +188,17 @@ const map1Config: LevelConfig = {
     enemyAt('snake', 3_130, smallSurface(310), 3_060, 3_250),
     enemy('hyena', 4_050, 3_720, 4_380),
     enemy('snake', 5_700, 5_400, 6_020),
-    enemyAt('scorpio', 6_995, smallSurface(340), 6_920, 7_080),
+    enemy('scorpio', 7_020, 6_820, 7_250),
     enemy('snake', 7_750, 7_420, 8_060),
-    enemyAt('hyena', 8_260, vineSurface(390), 8_170, 8_360),
+    enemyAt('snake', 8_260, vineSurface(390), 8_170, 8_360),
     enemy('snake', 9_700, 9_360, 10_040),
-    enemyAt('snake', 11_390, smallSurface(340), 11_310, 11_470),
+    enemy('snake', 11_420, 11_210, 11_640),
     enemy('scorpio', 12_320, 11_980, 12_650),
-    enemyAt('hyena', 13_380, vineSurface(390), 13_270, 13_500),
+    enemyAt('snake', 13_380, vineSurface(390), 13_270, 13_500),
     enemy('snake', 14_950, 14_620, 15_290),
     enemy('hyena', 16_050, 15_720, 16_380),
     enemyAt('snake', 16_620, vineSurface(395), 16_520, 16_760),
-    enemyAt('scorpio', 17_380, smallSurface(335), 17_300, 17_460),
+    enemy('scorpio', 17_420, 17_240, 17_650),
     enemy('snake', 18_650, 18_320, 18_980)
   ],
   traps: [
@@ -249,21 +250,21 @@ const map2Config: LevelConfig = {
   ],
   enemies: [
     enemy('hyena', 2_760, 2_420, 3_100),
-    enemyAt('snake', 3_520, smallSurface(405), 3_450, 3_610),
+    enemy('snake', 3_520, 3_320, 3_740),
     enemy('scorpio', 4_760, 4_420, 5_100),
-    enemyAt('hyena', 5_820, smallSurface(350), 5_720, 5_930),
+    enemyAt('snake', 5_820, smallSurface(350), 5_720, 5_930),
     enemy('snake', 6_480, 6_160, 6_820),
-    enemyAt('scorpio', 7_220, vineSurface(390), 7_120, 7_350),
+    enemy('scorpio', 7_220, 7_020, 7_450),
     enemy('hyena', 8_480, 8_140, 8_820),
-    enemyAt('scorpio', 9_800, smallSurface(345), 9_720, 9_900),
+    enemy('scorpio', 9_800, 9_600, 10_020),
     enemy('hyena', 10_650, 10_320, 10_980),
     enemyAt('snake', 11_900, smallSurface(330), 11_820, 12_000),
     enemy('scorpio', 12_620, 12_280, 12_960),
-    enemyAt('hyena', 13_760, vineSurface(395), 13_660, 13_910),
+    enemy('hyena', 13_760, 13_560, 13_980),
     enemy('scorpio', 14_900, 14_560, 15_240),
     enemy('hyena', 15_720, 15_390, 16_040),
-    enemyAt('scorpio', 16_360, vineSurface(395), 16_260, 16_500),
-    enemyAt('hyena', 16_930, smallSurface(335), 16_850, 17_080),
+    enemy('scorpio', 16_360, 16_160, 16_580),
+    enemyAt('snake', 16_930, smallSurface(335), 16_850, 17_080),
     enemy('snake', 17_980, 17_640, 18_320),
     enemyAt('scorpio', 18_860, vineSurface(390), 18_760, 19_000),
     enemy('hyena', 19_940, 19_600, 20_280),
@@ -327,21 +328,21 @@ const map3Config: LevelConfig = {
   ],
   enemies: [
     enemy('snake', 2_950, 2_620, 3_280),
-    enemyAt('vulture', 4_740, vineSurface(350), 4_660, 4_860),
+    enemy('vulture', 4_740, 4_540, 4_970),
     enemy('hyena', 5_840, 5_500, 6_180),
-    enemyAt('scorpio', 7_170, smallSurface(360), 7_080, 7_260),
+    enemy('scorpio', 7_170, 6_970, 7_390),
     enemy('vulture', 8_220, 7_880, 8_560),
-    enemyAt('vulture', 9_280, vineSurface(395), 9_160, 9_420),
+    enemy('vulture', 9_280, 9_080, 9_510),
     enemy('scorpio', 10_900, 10_560, 11_240),
-    enemyAt('hyena', 12_560, smallSurface(330), 12_480, 12_680),
+    enemy('hyena', 12_560, 12_360, 12_790),
     enemy('vulture', 13_450, 13_100, 13_780),
     enemyAt('scorpio', 14_450, vineSurface(395), 14_360, 14_560),
     enemy('hyena', 15_650, 15_320, 15_980),
-    enemyAt('vulture', 16_820, vineSurface(390), 16_710, 16_960),
+    enemy('vulture', 16_820, 16_620, 17_050),
     enemy('snake', 17_900, 17_560, 18_230),
     enemyAt('scorpio', 19_150, vineSurface(385), 19_060, 19_270),
     enemy('vulture', 20_150, 19_820, 20_480),
-    enemyAt('vulture', 21_390, vineSurface(380), 21_260, 21_520),
+    enemy('vulture', 21_390, 21_190, 21_620),
     enemy('scorpio', 22_300, 21_960, 22_640)
   ],
   traps: [
@@ -1300,8 +1301,8 @@ function enemyAt(
     type,
     x,
     y: y + PLATFORM_ENEMY_FOOT_OFFSET,
-    patrolLeft,
-    patrolRight
+    patrolLeft: patrolLeft + PLATFORM_PATROL_EDGE_INSET,
+    patrolRight: patrolRight - PLATFORM_PATROL_EDGE_INSET
   };
 }
 

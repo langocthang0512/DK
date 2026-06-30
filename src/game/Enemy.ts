@@ -101,14 +101,24 @@ export class Enemy {
     const absDistanceX = Math.abs(distanceX);
     const seesPlayer = absDistanceX <= this.definition.detectRange && distanceY < 90;
 
-    if (seesPlayer) {
+    const atLeftEdge = this.sprite.x <= this.config.patrolLeft;
+    const atRightEdge = this.sprite.x >= this.config.patrolRight;
+    const playerIsOutsideLeft = distanceX < 0 && atLeftEdge;
+    const playerIsOutsideRight = distanceX > 0 && atRightEdge;
+
+    if (seesPlayer && !playerIsOutsideLeft && !playerIsOutsideRight) {
       this.#facing = distanceX < 0 ? -1 : 1;
-    } else if (this.sprite.x <= this.config.patrolLeft) {
+    } else if (atLeftEdge) {
       this.#facing = 1;
-    } else if (this.sprite.x >= this.config.patrolRight) {
+    } else if (atRightEdge) {
       this.#facing = -1;
     }
 
+    this.sprite.x = Phaser.Math.Clamp(
+      this.sprite.x,
+      this.config.patrolLeft,
+      this.config.patrolRight
+    );
     this.sprite.setFlipX(this.#facing > 0);
 
     if (seesPlayer && absDistanceX <= this.definition.attackRange) {
