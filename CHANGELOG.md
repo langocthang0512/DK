@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0-release] - 2026-07-01
+
+### Release
+
+- Released the latest approved local build with final Main Menu visuals and Pause Menu flow fixes.
+
 ## [1.3.3-release] - 2026-07-01
 
 ### Release

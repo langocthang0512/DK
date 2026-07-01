@@ -500,6 +500,10 @@ export class FinalLevelScene extends Phaser.Scene {
     this.#createControls();
     this.#connectPhysics();
     this.#configureCamera();
+    this.events.off('resume');
+    this.events.on('resume', () => {
+      this.#resetPauseKeys();
+    });
   }
 
   override update(time: number): void {
@@ -1387,10 +1391,17 @@ export class FinalLevelScene extends Phaser.Scene {
       return;
     }
 
+    this.#resetPauseKeys();
     this.scene.launch(SceneKey.PauseMenu, {
       parentScene: this.sys.settings.key
     });
-    this.scene.pause();
+    this.scene.bringToTop(SceneKey.PauseMenu);
+    this.scene.pause(this.sys.settings.key);
+  }
+
+  #resetPauseKeys(): void {
+    this.#keys.escape.reset();
+    this.#keys.p.reset();
   }
 
   #updateCameraLookAhead(): void {

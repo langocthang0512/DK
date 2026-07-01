@@ -3,9 +3,9 @@ import Phaser from 'phaser';
 import type { Services } from '@core/Services';
 import { SceneKey } from '@scenes/SceneKey';
 import {
-  createMenuEnvironment,
-  createPixelButton,
-  createPixelTitle,
+  createCoverImageBackground,
+  createFantasyPixelButton,
+  createFantasyPixelTitle,
   playUiToneSequence,
   type PixelButton
 } from '@ui/pixelUi';
@@ -15,6 +15,7 @@ export class MainMenuScene extends Phaser.Scene {
   #buttons: PixelButton[] = [];
   #selectedIndex = 0;
   #isStarting = false;
+  #isQuitting = false;
 
   constructor() {
     super(SceneKey.MainMenu);
@@ -31,20 +32,36 @@ export class MainMenuScene extends Phaser.Scene {
   }
 
   create(): void {
+    this.#buttons = [];
+    this.#selectedIndex = 0;
+    this.#isStarting = false;
+    this.#isQuitting = false;
     this.#services.events.emit('scene:ready', { key: SceneKey.MainMenu });
     const { width, height } = this.scale;
 
-    createMenuEnvironment(this);
-    createPixelTitle(this, width * 0.5, height * 0.37, 'DRAGON KNIGHT', 58);
+    createCoverImageBackground(this, {
+      key: 'ui.mainMenuBackground',
+      darken: 0.08
+    });
+    this.add.rectangle(0, 0, width, height, 0x0d0a08, 0.16).setOrigin(0, 0).setDepth(900);
+    createFantasyPixelTitle(this, width * 0.5, height * 0.36, 'DRAGON KNIGHT', 72);
 
     this.#buttons = [
-      createPixelButton(this, {
+      createFantasyPixelButton(this, {
         x: width * 0.5,
-        y: height * 0.37 + 82,
-        width: 126,
-        height: 30,
+        y: height * 0.36 + 105,
+        width: 238,
+        height: 54,
         label: 'START',
         onClick: () => this.#startGame()
+      }),
+      createFantasyPixelButton(this, {
+        x: width * 0.5,
+        y: height * 0.36 + 174,
+        width: 238,
+        height: 54,
+        label: 'QUIT',
+        onClick: () => this.#quitGame()
       })
     ];
     this.#setSelected(0);
@@ -55,8 +72,13 @@ export class MainMenuScene extends Phaser.Scene {
       callback: () => playUiToneSequence([110], 0.01)
     });
 
+    this.input.keyboard?.removeAllListeners('keydown');
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
-      if (event.key === 'Enter' || event.key === ' ') {
+      if (event.key === 'ArrowUp' || event.key === 'w' || event.key === 'W') {
+        this.#setSelected(this.#selectedIndex - 1);
+      } else if (event.key === 'ArrowDown' || event.key === 's' || event.key === 'S') {
+        this.#setSelected(this.#selectedIndex + 1);
+      } else if (event.key === 'Enter' || event.key === ' ') {
         this.#pressSelected();
       }
     });
@@ -79,7 +101,12 @@ export class MainMenuScene extends Phaser.Scene {
 
     selected.setPressed(true);
     this.time.delayedCall(90, () => selected.setPressed(false));
-    this.#startGame();
+
+    if (this.#selectedIndex === 0) {
+      this.#startGame();
+    } else {
+      this.#quitGame();
+    }
   }
 
   #startGame(): void {
@@ -91,5 +118,19 @@ export class MainMenuScene extends Phaser.Scene {
     playUiToneSequence([392, 523], 0.025);
     this.cameras.main.fadeOut(500, 0, 0, 0);
     this.time.delayedCall(500, () => this.scene.start(SceneKey.Map1));
+  }
+
+  #quitGame(): void {
+    if (this.#isQuitting || this.#isStarting) {
+      return;
+    }
+
+    this.#isQuitting = true;
+    playUiToneSequence([196, 147], 0.018);
+    this.cameras.main.fadeOut(240, 0, 0, 0);
+    this.time.delayedCall(260, () => {
+      window.close();
+      this.game.destroy(true);
+    });
   }
 }

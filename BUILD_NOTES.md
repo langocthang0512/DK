@@ -1,12 +1,12 @@
 # Build Notes
 
-Version: `v1.3.3-release`
+Version: `v1.4.0-release`
 
 Date: 2026-07-01
 
 ## Scope
 
-Playable v1.3.3 release build for DK.
+Playable v1.4.0 release build for DK.
 
 This release is built from the latest approved local project state after the v1.3.3 local QA and bugfix pass.
 
@@ -55,6 +55,7 @@ Final validation status:
 - Production output: `dist/index.html` present
 - v1.3.3 held-movement attack launch patch: lint, typecheck, and production build passed locally
 - v1.3.3 release build: lint, typecheck, and production build passed locally
+- v1.4.0 release build: final approved local Main Menu and Pause Menu fixes included
 - v1.3.2 held-movement attack launch patch: lint, typecheck, and production build passed locally
 - v1.3.1 combat launch patch: lint, typecheck, and production build passed locally
 

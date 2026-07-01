@@ -66,6 +66,10 @@ export const assetManifest: AssetManifest = {
     {
       key: 'environment.approved.vinePlatform',
       url: '/assets/approved-environment/vine-platform.png'
+    },
+    {
+      key: 'ui.mainMenuBackground',
+      url: '/assets/ui/main-menu-background.png'
     }
   ],
   spritesheets: [

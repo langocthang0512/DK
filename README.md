@@ -2,7 +2,7 @@
 
 DK is a web-based 2D platformer built with Phaser, TypeScript, Vite, npm, Vercel, and GitHub Actions.
 
-Current version: `v1.3.3-release`
+Current version: `v1.4.0-release`
 
 This release build contains the v1.3.3 complete game flow: Main Menu -> Map 1 -> Map 2 -> Map 3 -> Map 4 -> Ending using only approved assets, animations, controllers, collisions, and gameplay systems.
 
